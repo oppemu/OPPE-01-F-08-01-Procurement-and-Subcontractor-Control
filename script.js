@@ -1,7 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('entryDate').value = today;
+    const today = new Date();
+    const day = today.getDate();
+    const month = today.getMonth(); // 0-11
+    const yearCE = today.getFullYear(); // ค.ศ.
+    const yearBE = yearCE + 543; // พ.ศ.
+
+    const monthNamesThai = [
+        "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+        "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ];
+
+    // 1. รูปแบบภาษาไทยเต็ม สำหรับแสดงบนหน้าเว็บ
+    const displayThaiDate = `${day} ${monthNamesThai[month]} ${yearBE}`;
+    if (document.getElementById('displayThaiDateInput')) {
+        document.getElementById('displayThaiDateInput').value = displayThaiDate;
+    }
+
+    // 2. รูปแบบ DD/MM/YYYY สำหรับส่งเข้า Google Sheet (ซ่อนไว้)
+    const formattedDay = String(day).padStart(2, '0');
+    const formattedMonth = String(month + 1).padStart(2, '0');
+    const sheetDate = `${formattedDay}/${formattedMonth}/${yearCE}`;
+    
+    if (document.getElementById('entryDate')) {
+        document.getElementById('entryDate').value = sheetDate;
+    }
 });
+
+// ... โค้ดส่วนอื่นๆ (เช่น checkEmailAndProceed) คงไว้เหมือนเดิม ...
 
 async function checkEmailAndProceed() {
     const emailInput = document.getElementById('startEmail');
@@ -22,7 +47,17 @@ async function checkEmailAndProceed() {
             const result = await response.json();
 
             if (result.status === 'success' && result.data) {
-                if (document.getElementById('recorderName')) document.getElementById('recorderName').value = result.data.name || '';
+    // ดึงชื่อมาและลบคำว่า นาย, นาง, นางสาว ออก
+    let rawName = result.data.name || '';
+    let cleanName = rawName.replace(/นาย|นางสาว|นาง/g, '').trim();
+    cleanName = cleanName.replace(/\s+/g, ' '); // จัดการช่องว่างที่อาจเกิดจากการลบคำ
+
+    if (document.getElementById('recorderName')) document.getElementById('recorderName').value = cleanName;
+    if (document.getElementById('position')) document.getElementById('position').value = result.data.position || '';
+    
+    // แสดงชื่อหน่วยงานเต็มในหน้าฟอร์ม
+    if (document.getElementById('departmentName')) document.getElementById('departmentName').value = result.data.department || '';
+    // ... โค้ดส่วนอื่นคงเดิม ...
                 if (document.getElementById('position')) document.getElementById('position').value = result.data.position || '';
                 
                 // แสดงชื่อหน่วยงานเต็มในหน้าฟอร์ม
@@ -43,9 +78,21 @@ async function checkEmailAndProceed() {
         btn.innerText = 'ดึงข้อมูลและดำเนินการต่อ';
         btn.disabled = false;
         
-        document.getElementById('hiddenEmail').value = email;
-        document.getElementById('displayEmailInput').value = email;
-        document.getElementById('displayEmail').innerText = email;
+        // เช็คก่อนว่ามีช่องเหล่านี้อยู่จริงไหม ค่อยใส่ค่า เพื่อป้องกัน Error (Null)
+        if (document.getElementById('hiddenEmail')) {
+            document.getElementById('hiddenEmail').value = email;
+        }
+        if (document.getElementById('displayEmailInput')) {
+            document.getElementById('displayEmailInput').value = email;
+        }
+        if (document.getElementById('displayEmail')) {
+            document.getElementById('displayEmail').innerText = email;
+        }
+        
+        // สำหรับหน้า HTML ชุดใหม่ที่เราเพิ่งเปลี่ยน
+        if (document.getElementById('email')) {
+            document.getElementById('email').value = email;
+        }
 
         expandForm();
     }
@@ -75,6 +122,7 @@ function expandForm() {
         document.getElementById('mainFormContent').style.display = 'block';
     }, 150);
 }
+
 // ฟังก์ชันเมื่อกดปุ่ม [เปลี่ยนอีเมล]
 function resetEmail() {
     const container = document.getElementById('appContainer');
@@ -146,6 +194,14 @@ async function submitForm() {
             form.reset();
             resetEmail(); // คืนค่ากลับไปหน้าอีเมล
             document.getElementById('startEmail').value = '';
+            
+            // อัปเดตวันที่ให้เป็นปัจจุบันเสมอหลังจากรีเซ็ตฟอร์ม
+            const now = new Date();
+            if (document.getElementById('entryDate')) {
+                const day = String(now.getDate()).padStart(2, '0');
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                document.getElementById('entryDate').value = `${day}/${month}/${now.getFullYear()}`;
+            }
         } else {
             alert('❌ เกิดข้อผิดพลาด: ' + result.message);
         }
@@ -157,6 +213,7 @@ async function submitForm() {
         submitBtn.innerText = 'บันทึกข้อมูล';
     }
 }
+
 // ฟังก์ชันนับจำนวนครั้งที่เข้าดำเนินการอัตโนมัติ
 async function updateVisitCount() {
     const subjectInput = document.getElementById('subject');
@@ -192,8 +249,15 @@ async function updateVisitCount() {
 // ตรวจจับเมื่อพิมพ์ข้อมูลเสร็จแล้วคลิกออก (Blur)
 document.getElementById('subject').addEventListener('blur', updateVisitCount);
 document.getElementById('contractVisits').addEventListener('blur', updateVisitCount);
+
+// อัปเดตตัวเลขรวมแบบ Real-time โดยไม่ยิง API พร่ำเพรื่อ
 document.getElementById('contractVisits').addEventListener('input', () => {
-    // อัปเดตตัวเลขรวมแบบ Real-time ถ้ามีข้อมูลเดิมอยู่แล้ว
-    const subject = document.getElementById('subject').value.trim();
-    if (subject) updateVisitCount();
+    const currentVisitInput = document.getElementById('currentVisit');
+    const totalVisits = document.getElementById('contractVisits').value.trim() || '?';
+    
+    // ถ้าเคยนับครั้งที่ (ตัวหน้า) มาแล้ว ให้เปลี่ยนแค่ตัวเลขข้างหลัง (ตัวหลัง) ทันที
+    if (currentVisitInput.value && currentVisitInput.value !== 'กำลังนับ...') {
+        const currentCount = currentVisitInput.value.split('/')[0];
+        currentVisitInput.value = `${currentCount}/${totalVisits}`;
+    }
 });

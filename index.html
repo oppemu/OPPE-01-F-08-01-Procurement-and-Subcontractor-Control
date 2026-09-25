@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบบันทึกข้อมูลการปฏิบัติงาน - มหาวิทยาลัยมหิดล</title>
+    <title>OPPE-01-F-08-01 - มหาวิทยาลัยมหิดล</title>
     <link href="https://fonts.googleapis.com/css2?family=Anuphun:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
@@ -15,8 +15,8 @@
         
         <!-- ส่วนหัวและตรวจสอบอีเมล (แสดงตลอด) -->
         <div class="auth-section">
-            <div class="logo-placeholder">MU</div>
-            <h2>ระบบบันทึกข้อมูลการปฏิบัติงาน</h2>
+            <img src="LOGO.png" alt="โลโก้กองกายภาพและสิ่งแวดล้อม" class="org-logo">
+            <h2>OPPE-01-F-08-01-แบบฟอร์มการจัดซื้อจัดจ้างและการควบคุมควบคุมผู้รับเหมา</h2>
             <p id="authSubtitle">กรุณากรอก E-Mail ของท่านเพื่อดึงข้อมูลอัตโนมัติ</p>
             
             <div id="emailInputGroup" class="email-input-group">
@@ -33,37 +33,47 @@
         <!-- ส่วนฟอร์มหลัก (ซ่อนไว้และจะกางออก) -->
         <div id="mainFormContent" class="form-content" style="display: none;">
             <form id="mahidolForm">
-                <!-- ซ่อนค่าอีเมลและรหัสย่อเพื่อส่งไปกับฟอร์ม -->
+                <!-- ซ่อนค่าอีเมลและวันที่ส่งไปกับฟอร์ม -->
                 <input type="hidden" id="hiddenEmail" name="email">
-                <input type="hidden" id="shortCode" name="shortCode">
+                <input type="hidden" id="entryDate" name="entryDate">
+                <input type="hidden" id="department" name="department">
 
                 <!-- Section 1: ข้อมูลผู้กรอกแบบฟอร์ม -->
-                <div class="form-section user-info-section">
+                <div class="user-profile-card">
                     <h3>1. ข้อมูลผู้กรอกแบบฟอร์ม</h3>
-                    <div class="user-info-card">
-                        <div class="info-row">
-                            <span class="info-label">วันที่กรอกข้อมูล :</span>
-                            <input type="date" id="entryDate" name="entryDate" class="inline-input">
+                    
+                    <div class="profile-row">
+                        <div class="profile-label">วันที่กรอกข้อมูล :</div>
+                        <div class="profile-value">
+                            <input type="text" class="profile-input" id="displayThaiDateInput" disabled>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">ชื่อ-นามสกุล :</span>
-                            <input type="text" id="recorderName" name="recorderName" class="inline-input" placeholder="ดึงข้อมูลอัตโนมัติ / กรอกชื่อ-นามสกุล">
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">ชื่อ-นามสกุล :</div>
+                        <div class="profile-value">
+                            <input type="text" class="profile-input" id="recorderName" name="recorderName" readonly>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">ตำแหน่ง :</span>
-                            <input type="text" id="position" name="position" class="inline-input" placeholder="ดึงข้อมูลอัตโนมัติ / กรอกตำแหน่ง">
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">ตำแหน่ง :</div>
+                        <div class="profile-value">
+                            <input type="text" class="profile-input" id="position" name="position" readonly>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">หน่วยงาน :</span>
-                            <input type="text" id="departmentName" class="inline-input" placeholder="ดึงข้อมูลอัตโนมัติ / กรอกชื่อหน่วยงาน">
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">หน่วยงาน :</div>
+                        <div class="profile-value">
+                            <input type="text" class="profile-input" id="departmentName" name="departmentName" readonly>
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">รหัสหน่วยงาน :</span>
-                            <input type="text" id="department" name="department" class="inline-input" placeholder="ดึงข้อมูลอัตโนมัติ / กรอกรหัสหน่วยงาน">
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">E-Mail :</span>
-                            <input type="email" id="displayEmailInput" name="email" class="inline-input readonly-text" readonly>
+                    </div>
+
+                    <div class="profile-row">
+                        <div class="profile-label">E-Mail :</div>
+                        <div class="profile-value">
+                            <input type="text" class="profile-input" id="email" name="email" readonly>
                         </div>
                     </div>
                 </div>
@@ -107,7 +117,6 @@
                 <div class="form-section">
                     <h3>4. ความปลอดภัยและสิ่งแวดล้อม</h3>
                     <div class="grid-container">
-                        <!-- เลือก "ผ่าน" ไว้เป็นค่าเริ่มต้น -->
                         <div class="form-group"><label>อบรม COSHEM</label><select name="coshem"><option value="ผ่าน" selected>ผ่าน</option><option value="ไม่ผ่าน">ไม่ผ่าน</option><option value="รออบรม">รออบรม</option></select></div>
                         <div class="form-group"><label>ผลตรวจสอบประวัติอาชญากรรม</label><select name="criminalCheck"><option value="ผ่าน">ผ่าน</option><option value="ไม่พบประวัติ">ไม่พบประวัติ</option></select></div>
                         <div class="form-group"><label>ผลตรวจสอบสารเสพติด</label><select name="drugTest"><option value="ปกติ">ปกติ (ไม่พบ)</option><option value="พบสารเสพติด">พบสารเสพติด</option></select></div>
@@ -115,8 +124,32 @@
                         <div class="form-group"><label>การตรวจสุขภาพ</label><select name="healthCheck"><option value="ผ่าน">ผ่านเกณฑ์</option><option value="ไม่ผ่าน">ไม่ผ่าน</option></select></div>
                         <div class="form-group"><label>อุปกรณ์ป้องกัน (PPE)</label><input type="text" name="ppe" placeholder="เช่น หมวกนิรภัย, รองเท้าเซฟตี้"></div>
                         <div class="form-group"><label>สารเคมีที่ใช้ SDS</label><input type="text" name="sds" placeholder="ระบุสารเคมี (ถ้ามี)"></div>
-                        <div class="form-group"><label>ประเมินความเสี่ยงหน้างาน</label><select name="riskAssessment"><option value="ความเสี่ยงต่ำ">ความเสี่ยงต่ำ</option><option value="ความเสี่ยงปานกลาง">ความเสี่ยงปานกลาง</option><option value="ความเสี่ยงสูง">ความเสี่ยงสูง</option></select></div>
-                        <div class="form-group"><label>ผลกระทบต่อสิ่งแวดล้อม</label><select name="envImpact"><option value="ไม่มี">ไม่มี</option><option value="มีผลกระทบเล็กน้อย">มีผลกระทบเล็กน้อย</option></select></div>
+                        
+                        <div class="form-group">
+                            <label>ประเภทของการเปลี่ยนแปลง (Type of Change)</label>
+                            <select name="typeOfChange">
+                                <option value="ไม่มีการเปลี่ยนแปลง">ไม่มีการเปลี่ยนแปลง</option>
+                                <option value="มีการเปลี่ยนแปลง">มีการเปลี่ยนแปลง</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ผลกระทบความปลอดภัย อาชีวอนามัย</label>
+                            <select name="ohsImpact">
+                                <option value="ไม่มีผลกระทบ">ไม่มีผลกระทบ</option>
+                                <option value="มีผลกระทบ">มีผลกระทบ</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group"><label>การประเมินผลกระทบด้านสิ่งแวดล้อม</label><select name="envImpact"><option value="ไม่มี">ไม่มี</option><option value="มีผลกระทบเล็กน้อย">มีผลกระทบเล็กน้อย</option></select></div>
+                        <div class="form-group"><label>การประเมินความเสี่ยงและโอกาส</label><select name="riskAssessment"><option value="ความเสี่ยงต่ำ">ความเสี่ยงต่ำ</option><option value="ความเสี่ยงปานกลาง">ความเสี่ยงปานกลาง</option><option value="ความเสี่ยงสูง">ความเสี่ยงสูง</option></select></div>
+                        
+                        <div class="form-group">
+                            <label>สถานะการดำเนินการ (HSE Status)</label>
+                            <select name="hseStatus">
+                                <option value="รอดำเนินการ">รอดำเนินการ</option>
+                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 

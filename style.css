@@ -7,8 +7,10 @@
     --border-color: #dce1e6;
 }
 
+/* กำหนดฟอนต์ Anuphun และตั้งค่าตัวบางเป็นค่าเริ่มต้นทั้งหมด */
 body {
     font-family: 'Anuphun', sans-serif;
+    font-weight: 300;
     color: var(--text-main);
     background-color: var(--bg-color);
     margin: 0;
@@ -34,12 +36,12 @@ body {
 
 /* สถานะกล่องเล็ก (หน้าตรวจสอบอีเมล) */
 .app-container.compact {
-    max-width: 450px;
+    max-width: 480px;
 }
 
 /* สถานะกล่องกางออก (หน้าฟอร์ม) */
 .app-container.expanded {
-    max-width: 1000px;
+    max-width: 1050px;
 }
 
 /* ส่วนหัว (Logo, ชื่อฟอร์ม, ช่องกรอกอีเมล) */
@@ -55,28 +57,25 @@ body {
     padding-bottom: 20px;
 }
 
-.logo-placeholder {
-    width: 60px;
-    height: 60px;
-    background-color: var(--mahidol-blue);
-    color: var(--mahidol-gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0 auto 15px;
+.org-logo {
+    max-width: 320px;
+    height: auto;
+    margin: 0 auto 20px auto;
+    display: block;
 }
 
 .auth-section h2 {
     color: var(--mahidol-blue);
     margin: 0 0 10px 0;
+    font-size: 22px; /* ขยายขนาดตัวหนังสือ */
+    line-height: 1.4;
+    font-weight: 300; /* ตัวบาง */
 }
 
 .auth-section p {
     color: #666;
-    font-size: 14px;
+    font-size: 16px; /* ขยายขนาดตัวหนังสือ */
+    font-weight: 300;
     margin-bottom: 20px;
 }
 
@@ -96,15 +95,17 @@ body {
 
 .verified-user-group p {
     margin: 0;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 300;
 }
 
 .edit-btn {
-    font-size: 12px;
+    font-size: 14px;
     color: #dc3545;
     cursor: pointer;
     margin-left: 10px;
     text-decoration: underline;
+    font-weight: 300;
 }
 
 /* ส่วนฟอร์มหลักที่กางออกมา */
@@ -132,7 +133,8 @@ body {
     margin-top: 0;
     color: var(--mahidol-blue);
     margin-bottom: 15px;
-    font-size: 16px;
+    font-size: 20px; /* ขยายขนาดหัวข้อส่วน */
+    font-weight: 300; /* ตัวบาง */
 }
 
 .grid-container {
@@ -152,18 +154,19 @@ body {
 }
 
 label {
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 13px;
+    font-weight: 300; /* ตัวบาง */
+    margin-bottom: 6px;
+    font-size: 16px; /* ขยายขนาดป้ายชื่อ */
     color: #444;
 }
 
 input, select, textarea {
     font-family: 'Anuphun', sans-serif;
-    padding: 10px;
+    font-weight: 300; /* ตัวบาง */
+    padding: 11px 12px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 16px; /* ขยายขนาดตัวหนังสือในช่องกรอก */
     color: #000;
     transition: all 0.3s ease;
     background-color: #fff;
@@ -186,8 +189,8 @@ input:focus, select:focus, textarea:focus {
     background-color: var(--mahidol-blue);
     color: #fff;
     font-family: 'Anuphun', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 18px; /* ขยายขนาดตัวหนังสือปุ่ม */
+    font-weight: 300; /* ตัวบาง */
     padding: 12px;
     border: none;
     border-radius: 6px;
@@ -200,64 +203,84 @@ input:focus, select:focus, textarea:focus {
 .primary-btn:disabled { background-color: #999; cursor: not-allowed; }
 
 .submit-btn {
-    font-size: 18px;
+    font-size: 20px; /* ขยายขนาดปุ่มบันทึก */
+    font-weight: 300;
     padding: 15px;
     margin-top: 20px;
 }
-/* สไตล์สำหรับ Section 1 (เน้นอ่านง่าย ไม่เป็นช่องตาราง) */
-.user-info-section {
-    background-color: #f8fafc;
+
+/* ========================================== */
+/* CSS สำหรับส่วนที่ 1 ข้อมูลผู้กรอกแบบฟอร์ม */
+/* ========================================== */
+.user-profile-card {
+    background-color: #ffffff;
+    border-radius: 6px;
+    border-left: 5px solid #003366;
+    border: 1px solid #eaeaea;
+    border-left-width: 5px;
+    border-left-color: #003366;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
 }
 
-.user-info-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 10px 5px;
+.user-profile-card h3 {
+    color: #003366;
+    font-size: 20px; /* ขยายขนาดหัวข้อโปรไฟล์ */
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-weight: 300; /* ตัวบาง */
 }
 
-.info-row {
+.profile-row {
     display: flex;
     align-items: center;
-    font-size: 15px;
-    border-bottom: 1px dashed #cbd5e1;
-    padding-bottom: 8px;
+    padding: 12px 0;
+    border-bottom: 1px dashed #cccccc;
 }
 
-.info-label {
-    font-weight: 600;
-    color: var(--mahidol-blue);
-    width: 120px;
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+.profile-label {
+    width: 160px;
+    font-weight: 300; /* ตัวบาง */
+    color: #003366;
     flex-shrink: 0;
+    font-size: 17px; /* ขยายขนาดตัวหนังสือ */
 }
 
-.inline-input {
+.profile-value {
+    flex-grow: 1;
+}
+
+.profile-input {
+    width: 100%;
     border: none !important;
     background: transparent !important;
     box-shadow: none !important;
-    font-size: 15px;
-    font-weight: 500;
-    color: #1e293b;
-    width: 100%;
-    padding: 0 5px !important;
+    font-family: 'Anuphun', sans-serif;
+    font-weight: 300; /* ตัวบาง */
+    font-size: 17px; /* ขยายขนาดตัวหนังสือ */
+    color: #444;
+    outline: none;
+    padding: 0 !important;
 }
 
-.inline-input:focus {
-    border-bottom: 2px solid var(--mahidol-blue) !important;
-    border-radius: 0;
-}
-
-.inline-input.readonly-text {
-    color: #64748b;
+.profile-input:read-only, .profile-input:disabled {
+    color: #333;
+    background-color: transparent !important;
+    cursor: default;
 }
 
 @media (max-width: 600px) {
-    .info-row {
+    .profile-row {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
     }
-    .info-label {
+    .profile-label {
         width: 100%;
     }
 }
