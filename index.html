@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPPE-01-F-08-01 - มหาวิทยาลัยมหิดล</title>
-    <link href="https://fonts.googleapis.com/css2?family=Anuphun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -82,17 +83,56 @@
                 <div class="form-section">
                     <h3>2. รายละเอียดงานและสัญญา</h3>
                     <div class="grid-container">
-                        <div class="form-group"><label>สถานที่ดำเนินการ</label><input type="text" list="locations" name="location" placeholder="เลือกหรือระบุสถานที่">
-                            <datalist id="locations"><option value="อาคารเรียนรวม (ML)"></option><option value="อาคารศูนย์การเรียนรู้มหิดล (MLC)"></option><option value="หอสมุดและคลังความรู้ฯ"></option></datalist>
+                        <div class="form-group">
+                            <label>สถานที่ดำเนินการ</label>
+                            <input type="text" id="locationInput" name="location" placeholder="คลิกเพื่อเลือกสถานที่" readonly style="cursor: pointer; background-color: #fff;">
                         </div>
-                        <div class="form-group"><label>หมวดหมู่งาน</label><input type="text" list="categories" name="category">
-                            <datalist id="categories"><option value="งานซ่อมบำรุง"></option><option value="งานติดตั้งระบบ"></option><option value="งานทำความสะอาด"></option></datalist>
+
+                        <!-- POPUP (Modal) สำหรับเลือกสถานที่ดำเนินการ -->
+    <div id="locationModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>เลือกสถานที่ดำเนินการ</h3>
+                <span class="modal-close" id="closeLocationModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="category-list" id="locationList">
+                    <li data-value="สถานีไฟฟ้าย่อย">สถานีไฟฟ้าย่อย</li>
+                    <li data-value="ห้องปฏิบัติงานจราจร">ห้องปฏิบัติงานจราจร</li>
+                    <li data-value="อาคารบำบัดน้ำเสีย">อาคารบำบัดน้ำเสีย</li>
+                    <li data-value="อาคารเพาะชำ">อาคารเพาะชำ</li>
+                    <li data-value="อาคารศาลายา">อาคารศาลายา</li>
+                    <li data-value="อาคารอนุรักษ์">อาคารอนุรักษ์</li>
+                    <li data-value="MLC (ศูนย์การเรียนรู้มหิดล)">MLC (ศูนย์การเรียนรู้มหิดล)</li>
+                    <li data-value="PMH (มหิดลสิทธาคาร)">PMH (มหิดลสิทธาคาร)</li>
+                    <li data-value="SVD (สิริวิทยา)">SVD (สิริวิทยา)</li>
+                    <li data-value="อาคาร/พื้นที่กำกับกองกายภาพและสิ่งแวดล้อมฯ">อาคาร/พื้นที่กำกับกองกายภาพและสิ่งแวดล้อมฯ</li>
+                    <!-- เมื่อกดข้อนี้ จะยอมให้ผู้ใช้พิมพ์เองได้ -->
+                    <li data-value="custom" style="font-weight: 600; color: #dc3545;">พื้นที่ไม่อยู่ในรายการ (ระบุสถานที่เอง)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+                        <!-- ปรับช่องหมวดหมู่งานให้เปิด Popup -->
+                        <div class="form-group">
+                            <label>หมวดหมู่งาน</label>
+                            <input type="text" id="categoryInput" name="category" placeholder="คลิกเพื่อเลือกหมวดหมู่งาน" readonly style="cursor: pointer; background-color: #fff;">
                         </div>
-                        <div class="form-group"><label>ชื่อ-รหัส-ระเบียบปฏิบัติ (P/WI)</label><input type="text" name="pwiCode"></div>
-                        <div class="form-group"><label>เรื่องที่ดำเนินการ</label><input type="text" id="subject" name="subject" placeholder="พิมพ์ชื่อเรื่องเพื่อให้นับครั้งอัตโนมัติ"></div>
+
+                        <div class="form-group">
+                            <label>ชื่อ-รหัส-ระเบียบปฏิบัติ (P/WI)</label>
+                            <input type="text" id="pwiInput" name="pwiCode" placeholder="พิมพ์ระบุ P/WI">
+                        </div>
+
+                        <div class="form-group">
+                            <label>เรื่องที่ดำเนินการ</label>
+                            <input type="text" id="subject" name="subject" placeholder="คลิกเพื่อเลือกเรื่องที่ดำเนินการ" readonly style="cursor: pointer; background-color: #fff;">
+                        </div>
+
                         <div class="form-group"><label>ชื่อบริษัทดำเนินการ</label><input type="text" name="companyName"></div>
-                        <div class="form-group"><label>วันที่เริ่มสัญญา</label><input type="date" id="contractStart" name="contractStart"></div>
-                        <div class="form-group"><label>สิ้นสุดสัญญา</label><input type="date" id="contractEnd" name="contractEnd"></div>
+                        <div class="form-group"><label>วันที่เริ่มสัญญา</label><input type="text" id="contractStart" name="contractStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
+                        <div class="form-group"><label>สิ้นสุดสัญญา</label><input type="text" id="contractEnd" name="contractEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
                         <div class="form-group"><label>จำนวนวันตามสัญญา</label><input type="number" id="contractDays" name="contractDays" readonly class="readonly-input"></div>
                         <div class="form-group"><label>มูลค่าสัญญา (เงิน)</label><input type="number" name="contractValue" placeholder="บาท"></div>
                         <div class="form-group"><label>เข้าทำงานตามสัญญา (ครั้งทั้งหมด)</label><input type="number" id="contractVisits" name="contractVisits" placeholder="เช่น 12"></div>
@@ -105,8 +145,8 @@
                 <div class="form-section">
                     <h3>3. การดำเนินงานจริง</h3>
                     <div class="grid-container">
-                        <div class="form-group"><label>วันที่เข้าดำเนินการ</label><input type="date" id="workStart" name="workStart"></div>
-                        <div class="form-group"><label>วันที่ดำเนินการแล้วเสร็จ</label><input type="date" id="workEnd" name="workEnd"></div>
+                        <div class="form-group"><label>วันที่เข้าดำเนินการ</label><input type="text" id="workStart" name="workStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
+                        <div class="form-group"><label>วันที่ดำเนินการแล้วเสร็จ</label><input type="text" id="workEnd" name="workEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
                         <div class="form-group"><label>จำนวนวันที่ใช้ดำเนินการ</label><input type="number" id="workDays" name="workDays" readonly class="readonly-input"></div>
                         <div class="form-group"><label>คนปฏิบัติงานตามสัญญา</label><input type="number" name="expectedWorkers"></div>
                         <div class="form-group"><label>คนที่มาปฏิบัติงานจริง</label><input type="number" name="actualWorkers"></div>
@@ -114,65 +154,383 @@
                 </div>
 
                 <!-- Section 4: ความปลอดภัยและสิ่งแวดล้อม -->
-                <div class="form-section">
-                    <h3>4. ความปลอดภัยและสิ่งแวดล้อม</h3>
-                    <div class="grid-container">
-                        <div class="form-group"><label>อบรม COSHEM</label><select name="coshem"><option value="ผ่าน" selected>ผ่าน</option><option value="ไม่ผ่าน">ไม่ผ่าน</option><option value="รออบรม">รออบรม</option></select></div>
-                        <div class="form-group"><label>ผลตรวจสอบประวัติอาชญากรรม</label><select name="criminalCheck"><option value="ผ่าน">ผ่าน</option><option value="ไม่พบประวัติ">ไม่พบประวัติ</option></select></div>
-                        <div class="form-group"><label>ผลตรวจสอบสารเสพติด</label><select name="drugTest"><option value="ปกติ">ปกติ (ไม่พบ)</option><option value="พบสารเสพติด">พบสารเสพติด</option></select></div>
-                        <div class="form-group"><label>ใบอนุญาตทำงาน (Work Permit)</label><select name="workPermit"><option value="มี">มี</option><option value="ไม่มี/ไม่ใช้">ไม่มี/ไม่ใช้ (คนไทย)</option></select></div>
-                        <div class="form-group"><label>การตรวจสุขภาพ</label><select name="healthCheck"><option value="ผ่าน">ผ่านเกณฑ์</option><option value="ไม่ผ่าน">ไม่ผ่าน</option></select></div>
-                        <div class="form-group"><label>อุปกรณ์ป้องกัน (PPE)</label><input type="text" name="ppe" placeholder="เช่น หมวกนิรภัย, รองเท้าเซฟตี้"></div>
-                        <div class="form-group"><label>สารเคมีที่ใช้ SDS</label><input type="text" name="sds" placeholder="ระบุสารเคมี (ถ้ามี)"></div>
-                        
-                        <div class="form-group">
-                            <label>ประเภทของการเปลี่ยนแปลง (Type of Change)</label>
-                            <select name="typeOfChange">
-                                <option value="ไม่มีการเปลี่ยนแปลง">ไม่มีการเปลี่ยนแปลง</option>
-                                <option value="มีการเปลี่ยนแปลง">มีการเปลี่ยนแปลง</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ผลกระทบความปลอดภัย อาชีวอนามัย</label>
-                            <select name="ohsImpact">
-                                <option value="ไม่มีผลกระทบ">ไม่มีผลกระทบ</option>
-                                <option value="มีผลกระทบ">มีผลกระทบ</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group"><label>การประเมินผลกระทบด้านสิ่งแวดล้อม</label><select name="envImpact"><option value="ไม่มี">ไม่มี</option><option value="มีผลกระทบเล็กน้อย">มีผลกระทบเล็กน้อย</option></select></div>
-                        <div class="form-group"><label>การประเมินความเสี่ยงและโอกาส</label><select name="riskAssessment"><option value="ความเสี่ยงต่ำ">ความเสี่ยงต่ำ</option><option value="ความเสี่ยงปานกลาง">ความเสี่ยงปานกลาง</option><option value="ความเสี่ยงสูง">ความเสี่ยงสูง</option></select></div>
-                        
-                        <div class="form-group">
-                            <label>สถานะการดำเนินการ (HSE Status)</label>
-                            <select name="hseStatus">
-                                <option value="รอดำเนินการ">รอดำเนินการ</option>
-                                <option value="ดำเนินการแล้ว">ดำเนินการแล้ว</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+<div class="form-section">
+    <h3>4. ความปลอดภัยและสิ่งแวดล้อม</h3>
+    <div class="grid-container grid-3-cols">
+        
+        <!-- รวมช่องตัวเลือกทั้งหมดเรียงต่อกันใน Grid 3 คอลัมน์ -->
+        <div class="form-group">
+            <label>ประเภทการตรวจสุขภาพ</label>
+            <input type="text" id="healthCheckTypeInput" name="healthCheckType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>ผลการประเมินความพร้อมสุขภาพ</label>
+            <input type="text" id="healthCheckResultInput" name="healthCheckResult" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>สถานะการอบรม COSHEM</label>
+            <input type="text" id="coshemInput" name="coshem" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>ผลตรวจสอบประวัติอาชญากรรม</label>
+            <input type="text" id="criminalCheckInput" name="criminalCheck" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>ผลตรวจสอบสารเสพติด</label>
+            <input type="text" id="drugTestInput" name="drugTest" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>ใบอนุญาตทำงาน (Work Permit)</label>
+            <input type="text" id="workPermitInput" name="workPermit" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>สถานะใบอนุญาตทำงาน (Permit Status)</label>
+            <input type="text" id="permitStatusInput" name="permitStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>อุปกรณ์ป้องกัน (PPE) *เลือกได้หลายรายการ</label>
+            <input type="text" id="ppeInput" name="ppe" placeholder="คลิกเพื่อเลือก PPE" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>สถานะการอนุมัติใช้งานสารเคมีและ SDS</label>
+            <input type="text" id="sdsStatusInput" name="sdsStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>ระบุชื่อสารเคมีที่ใช้ *เลือกได้หลายรายการ</label>
+            <input type="text" id="sdsNameInput" name="sdsName" placeholder="คลิกเพื่อเลือกสารเคมี" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>ประเภทความเป็นอันตรายที่มักจะพบ</label>
+            <input type="text" id="hazardTypeInput" name="hazardType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>ระดับของผลกระทบ</label>
+            <input type="text" id="impactLevelInput" name="impactLevel" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group">
+            <label>สถานะการทบทวนการประเมิน</label>
+            <input type="text" id="reviewStatusInput" name="reviewStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+        </div>
+
+        <div class="form-group full-width">
+    <label>ลักษณะของผลกระทบ</label>
+    <textarea id="impactCharacterInput" name="impactCharacter" rows="1" placeholder="คลิกเพื่อเลือก" readonly class="popup-input"></textarea>
+</div>
+
+<div class="form-group full-width">
+    <label>ประเภทของการเปลี่ยนแปลง (ระบุลักษณะและสิ่งที่กำลังจะเปลี่ยนไปจากเดิม)</label>
+    <textarea id="changeTypeDetailInput" name="changeTypeDetail" rows="1" placeholder="คลิกเพื่อเลือก" readonly class="popup-input"></textarea>
+</div>
+
+<div class="form-group full-width">
+    <label>ผลลัพธ์และการจัดการ มาตรการรองรับ</label>
+    <textarea id="mitigationResultInput" name="mitigationResult" rows="1" placeholder="คลิกเพื่อเลือก" readonly class="popup-input"></textarea>
+</div>
+
+    </div>
+</div>
 
                 <!-- Section 5: สถานะและรายละเอียดเพิ่มเติม -->
                 <div class="form-section">
                     <h3>5. สถานะและรายละเอียดเพิ่มเติม</h3>
                     <div class="grid-container">
-                        <div class="form-group">
-                            <label>สถานะงาน (Job Status)</label>
-                            <input type="text" list="statusList" name="jobStatus">
-                            <datalist id="statusList"><option value="รอดำเนินการ"><option value="กำลังดำเนินการ"><option value="รออะไหล่"><option value="เสร็จสิ้น"></datalist>
-                        </div>
-                    </div>
-                    <div class="form-group full-width"><label>รายละเอียดสถานะงานหากมีการซ่อมแซม/ส่งพัสดุ</label><textarea name="repairDetails" rows="2"></textarea></div>
-                    <div class="form-group full-width"><label>รายละเอียดงาน</label><textarea name="jobDetails" rows="3"></textarea></div>
-                    <div class="form-group full-width"><label>หมายเหตุ</label><textarea name="remark" rows="2"></textarea></div>
+                        <div class="form-group full-width">
+    <label>สถานะงาน (Job Status)</label>
+    <textarea id="jobStatusInput" name="jobStatus" rows="1" placeholder="คลิกเพื่อเลือก" readonly class="popup-input"></textarea>
+</div>
+                        <div class="form-group full-width">
+    <label>ความจำเป็นในการนำเข้าที่ประชุมปฏิบัติการประจำเดือน</label>
+    <textarea id="meetingRequirementInput" name="meetingRequirement" rows="3" placeholder="คลิกเพื่อเลือก" readonly class="popup-input"></textarea>
+</div>
+                    <div class="form-group full-width">
+    <label>รายละเอียดสถานะงานหากมีการซ่อมแซม/ส่งพัสดุ</label>
+    <textarea id="jobDetailInput" name="jobDetail" rows="1" placeholder="คลิกเพื่อเลือก หรือระบุรายละเอียด" readonly class="popup-input"></textarea>
+</div>
+                    <div class="form-group full-width"><label>รายละเอียดงานที่ดำเนินการครั้งนี้</label><textarea name="jobDetails" rows="1"></textarea></div>
+                    <div class="form-group full-width"><label>หมายเหตุ</label><textarea name="remark" rows="1"></textarea></div>
                 </div>
 
                 <button type="button" class="primary-btn submit-btn" onclick="submitForm()">บันทึกข้อมูล</button>
             </form>
         </div>
     </div>
+
+    <!-- POPUP (Modal) สำหรับเลือกหมวดหมู่งาน 13 หมวด -->
+    <div id="categoryModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>เลือกหมวดหมู่งาน</h3>
+                <span class="modal-close" id="closeCategoryModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="category-list" id="categoryList">
+                    <li data-value="1. งานบริหารจัดการระบบมาตรฐานและองค์กร">1. งานบริหารจัดการระบบมาตรฐานและองค์กร</li>
+                    <li data-value="2. งานบริหารจัดการพื้นที่ ภูมิทัศน์ และพิธีการ">2. งานบริหารจัดการพื้นที่ ภูมิทัศน์ และพิธีการ</li>
+                    <li data-value="3. งานบริหารจัดการระบบขนส่งและจราจร">3. งานบริหารจัดการระบบขนส่งและจราจร</li>
+                    <li data-value="4. งานบริหารจัดการออกแบบและควบคุมงานก่อสร้าง">4. งานบริหารจัดการออกแบบและควบคุมงานก่อสร้าง</li>
+                    <li data-value="5. งานบริหารจัดการสุขอนามัยและสภาพแวดล้อม">5. งานบริหารจัดการสุขอนามัยและสภาพแวดล้อม</li>
+                    <li data-value="6. งานบริหารจัดการขยะและของเสีย">6. งานบริหารจัดการขยะและของเสีย</li>
+                    <li data-value="7. งานบริหารจัดการระบบน้ำและสุขาภิบาล">7. งานบริหารจัดการระบบน้ำและสุขาภิบาล</li>
+                    <li data-value="8. งานบริหารจัดการระบบไฟฟ้าและพลังงาน">8. งานบริหารจัดการระบบไฟฟ้าและพลังงาน</li>
+                    <li data-value="9. งานบริหารจัดการระบบปรับอากาศ">9. งานบริหารจัดการระบบปรับอากาศ</li>
+                    <li data-value="10. งานบริหารจัดการระบบความปลอดภัยและป้องกันเหตุ">10. งานบริหารจัดการระบบความปลอดภัยและป้องกันเหตุ</li>
+                    <li data-value="11. งานบริหารจัดการระบบแก๊สและท่อดูดควัน">11. งานบริหารจัดการระบบแก๊สและท่อดูดควัน</li>
+                    <li data-value="12. งานบริหารจัดการระบบลิฟต์และรถกระเช้าไฟฟ้า">12. งานบริหารจัดการระบบลิฟต์และรถกระเช้าไฟฟ้า</li>
+                    <li data-value="13. งานบริหารจัดการโสตทัศนูปกรณ์และวิศวกรรมเวที">13. งานบริหารจัดการโสตทัศนูปกรณ์และวิศวกรรมเวที</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- รวบรวม POPUP ทั้งหมดของหมวดความปลอดภัยและสิ่งแวดล้อม -->
+    <!-- ========================================== -->
+    <div id="modal_generic" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal_generic_title">เลือกข้อมูล</h3>
+                <span class="modal-close" id="close_modal_generic">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="category-list" id="list_generic"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP PPE (เลือกหลายรายการ) -->
+    <div id="modal_ppe" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>เลือกอุปกรณ์ป้องกัน (PPE)</h3>
+                <span class="modal-close" id="close_modal_ppe">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="category-list multi-select-list" id="list_ppe">
+                    <li><label><input type="checkbox" value="เข็มขัดนิรภัย / ชุดป้องกันการตก"> เข็มขัดนิรภัย / ชุดป้องกันการตก</label></li>
+                    <li><label><input type="checkbox" value="ชุดป้องกันสารเคมี"> ชุดป้องกันสารเคมี</label></li>
+                    <li><label><input type="checkbox" value="ถุงมือหนัง"> ถุงมือหนัง</label></li>
+                    <li><label><input type="checkbox" value="ถุงมือกันสารเคมี"> ถุงมือกันสารเคมี</label></li>
+                    <li><label><input type="checkbox" value="ถุงมือกันบาด"> ถุงมือกันบาด</label></li>
+                    <li><label><input type="checkbox" value="ถุงมือผ้า"> ถุงมือผ้า</label></li>
+                    <li><label><input type="checkbox" value="รองเท้านิรภัย"> รองเท้านิรภัย</label></li>
+                    <li><label><input type="checkbox" value="แว่นตานิรภัย / Face Shield"> แว่นตานิรภัย / Face Shield</label></li>
+                    <li><label><input type="checkbox" value="เสื้อสะท้อนแสง (High Visibility Vest)"> เสื้อสะท้อนแสง (High Visibility Vest)</label></li>
+                    <li><label><input type="checkbox" value="หน้ากาก N95"> หน้ากาก N95</label></li>
+                    <li><label><input type="checkbox" value="หน้ากากกันฝุ่น"> หน้ากากกันฝุ่น</label></li>
+                    <li><label><input type="checkbox" value="หน้ากากกรองสารเคมีแบบมีตลับกรอง"> หน้ากากกรองสารเคมีแบบมีตลับกรอง</label></li>
+                    <li><label><input type="checkbox" value="หมวกนิรภัย"> หมวกนิรภัย</label></li>
+                    <li><label><input type="checkbox" value="อุปกรณ์ป้องกันเสียง (Earplugs / Earmuffs)"> อุปกรณ์ป้องกันเสียง (Earplugs / Earmuffs)</label></li>
+                    <li><label style="color:#dc3545; font-weight:bold;"><input type="checkbox" value="custom"> อื่นๆ (โปรดระบุ)</label></li>
+                </ul>
+                <button type="button" class="primary-btn" id="btn_confirm_ppe" style="margin-top: 15px;">ยืนยันการเลือก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP สารเคมี (เลือกหลายรายการ) -->
+    <div id="modal_sds" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>เลือกสารเคมีที่ใช้</h3>
+                <span class="modal-close" id="close_modal_sds">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="category-list multi-select-list" id="list_sds">
+                    <li><label><input type="checkbox" value="น้ำยาล้างห้องน้ำ / น้ำยาล้างสุขภัณฑ์"> น้ำยาล้างห้องน้ำ / น้ำยาล้างสุขภัณฑ์</label></li>
+                    <li><label><input type="checkbox" value="น้ำยาถูพื้น / น้ำยาทำความสะอาดอเนกประสงค์"> น้ำยาถูพื้น / น้ำยาทำความสะอาดอเนกประสงค์</label></li>
+                    <li><label><input type="checkbox" value="น้ำยาเช็ดกระจก"> น้ำยาเช็ดกระจก</label></li>
+                    <li><label><input type="checkbox" value="น้ำยาฆ่าเชื้อ"> น้ำยาฆ่าเชื้อ</label></li>
+                    <li><label><input type="checkbox" value="น้ำมันหล่อลื่น / จาระบี"> น้ำมันหล่อลื่น / จาระบี</label></li>
+                    <li><label><input type="checkbox" value="น้ำยาล้างคอยล์แอร์ / สารทำความเย็น"> น้ำยาล้างคอยล์แอร์ / สารทำความเย็น</label></li>
+                    <li><label><input type="checkbox" value="สารเคมีเติมระบบ Cooling Tower"> สารเคมีเติมระบบ Cooling Tower</label></li>
+                    <li><label><input type="checkbox" value="น้ำยาล้างสนิม / ล้างตะกรัน"> น้ำยาล้างสนิม / ล้างตะกรัน</label></li>
+                    <li><label><input type="checkbox" value="ก๊าซออกซิเจน / ก๊าซอาร์กอน (สำหรับงานเชื่อม)"> ก๊าซออกซิเจน / ก๊าซอาร์กอน (สำหรับงานเชื่อม)</label></li>
+                    <li><label><input type="checkbox" value="สีน้ำ / สีน้ำมัน"> สีน้ำ / สีน้ำมัน</label></li>
+                    <li><label><input type="checkbox" value="ทินเนอร์"> ทินเนอร์</label></li>
+                    <li><label><input type="checkbox" value="น้ำยาผสมคอนกรีต"> น้ำยาผสมคอนกรีต</label></li>
+                    <li><label><input type="checkbox" value="กาวอุตสาหกรรม / ซิลิโคน"> กาวอุตสาหกรรม / ซิลิโคน</label></li>
+                    <li><label><input type="checkbox" value="สารกำจัดวัชพืช"> สารกำจัดวัชพืช</label></li>
+                    <li><label><input type="checkbox" value="สารกำจัดแมลง / น้ำยาฉีดพ่นยุง"> สารกำจัดแมลง / น้ำยาฉีดพ่นยุง</label></li>
+                    <li><label><input type="checkbox" value="ปุ๋ยเคมี"> ปุ๋ยเคมี</label></li>
+                    <li><label style="color:#dc3545; font-weight:bold;"><input type="checkbox" value="custom"> อื่นๆ (โปรดระบุ)</label></li>
+                </ul>
+                <button type="button" class="primary-btn" id="btn_confirm_sds" style="margin-top: 15px;">ยืนยันการเลือก</button>
+            </div>
+        </div>
+    </div>
     
+<!-- POPUP (Modal) สำหรับเลือก P/WI (แสดงเฉพาะเมื่อเลือกหมวด 1) -->
+    <div id="pwiModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>เลือกรหัสระเบียบปฏิบัติ (P/WI)</h3>
+                <span class="modal-close" id="closePwiModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="category-list" id="pwiList">
+                    <li data-value="OPPE-01-M-01 คู่มือระบบการจัดการสิ่งแวดล้อม อาชีวอนามัย และความปลอดภัย">OPPE-01-M-01 คู่มือระบบการจัดการสิ่งแวดล้อม อาชีวอนามัย และความปลอดภัย</li>
+                    <li data-value="OPPE-01-P-01 การประเมินประเด็นสิ่งแวดล้อมและความเสี่ยง">OPPE-01-P-01 การประเมินประเด็นสิ่งแวดล้อมและความเสี่ยง</li>
+                    <li data-value="OPPE-01-P-02 การจัดการกฎหมายและความสอดคล้อง">OPPE-01-P-02 การจัดการกฎหมายและความสอดคล้อง</li>
+                    <li data-value="OPPE-01-P-03 การจัดการวัตถุประสงค์และแผนงาน">OPPE-01-P-03 การจัดการวัตถุประสงค์และแผนงาน</li>
+                    <li data-value="OPPE-01-P-04 การจัดการความสามารถและความตระหนัก">OPPE-01-P-04 การจัดการความสามารถและความตระหนัก</li>
+                    <li data-value="OPPE-01-P-05 การสื่อสารและการมีส่วนร่วม">OPPE-01-P-05 การสื่อสารและการมีส่วนร่วม</li>
+                    <li data-value="OPPE-01-P-06 การควบคุมข้อมูลสารสนเทศ">OPPE-01-P-06 การควบคุมข้อมูลสารสนเทศ</li>
+                    <li data-value="OPPE-01-P-07 การจัดการความเปลี่ยนแปลง">OPPE-01-P-07 การจัดการความเปลี่ยนแปลง</li>
+                    <li data-value="OPPE-01-P-08 การจัดซื้อจัดจ้างและการควบคุมควบคุมผู้รับเหมา">OPPE-01-P-08 การจัดซื้อจัดจ้างและการควบคุมควบคุมผู้รับเหมา</li>
+                    <li data-value="OPPE-01-P-09 การจัดการพลังงานและทรัพยากร">OPPE-01-P-09 การจัดการพลังงานและทรัพยากร</li>
+                    <li data-value="OPPE-01-P-10 การเฝ้าระวังและวัดผลคุณภาพ ระบบการจัดการสิ่งแวดล้อม อาชีวอนามัย และความปลอดภัย">OPPE-01-P-10 การเฝ้าระวังและวัดผลคุณภาพ ระบบการจัดการสิ่งแวดล้อม อาชีวอนามัย และความปลอดภัย</li>
+                    <li data-value="OPPE-01-P-11 การรายงานและสอบสวนอุบัติการณ์">OPPE-01-P-11 การรายงานและสอบสวนอุบัติการณ์</li>
+                    <li data-value="OPPE-01-P-12 การเตรียมพร้อมและตอบโต้ภาวะฉุกเฉิน">OPPE-01-P-12 การเตรียมพร้อมและตอบโต้ภาวะฉุกเฉิน</li>
+                    <li data-value="OPPE-01-P-13 การเฝ้าระวังสุขภาพพนักงาน">OPPE-01-P-13 การเฝ้าระวังสุขภาพพนักงาน</li>
+                    <li data-value="OPPE-01-P-14 การตรวจประเมินภายใน">OPPE-01-P-14 การตรวจประเมินภายใน</li>
+                    <li data-value="OPPE-01-P-15 การทบทวนโดยฝ่ายบริหาร">OPPE-01-P-15 การทบทวนโดยฝ่ายบริหาร</li>
+                    <li data-value="OPPE-01-P-16 การจัดการสิ่งที่ไม่เป็นไปตามข้อกำหนด">OPPE-01-P-16 การจัดการสิ่งที่ไม่เป็นไปตามข้อกำหนด</li>
+                    <li data-value="custom" style="font-weight: 600; color: #dc3545;">ไม่อยู่ในรายการ (ระบุ P/WI เอง)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- POPUP (Modal) สำหรับเลือกวันที่ (เพิ่ม Dropdown เดือน/ปี + ล็อกขนาด) -->
+    <div id="dateModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 380px;">
+            <div class="modal-header">
+                <h3 id="dateModalTitle">เลือกวันที่</h3>
+                <span class="modal-close" id="closeDateModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="calendar-wrapper">
+                    <div class="calendar-header">
+                        <button type="button" id="prevMonthBtn" class="cal-nav-btn">&lt;</button>
+                        
+                        <!-- Dropdown เลือกเดือน และ เลือกปี พ.ศ. -->
+                        <div class="cal-select-group">
+                            <select id="calMonthSelect" class="cal-select"></select>
+                            <select id="calYearSelect" class="cal-select"></select>
+                        </div>
+
+                        <button type="button" id="nextMonthBtn" class="cal-nav-btn">&gt;</button>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
+                    </div>
+                    <div id="calendarDays" class="calendar-days"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP (Modal) สำหรับเลือกประเภทความเป็นอันตรายที่มักจะพบ -->
+    <div id="hazardModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>เลือกประเภทความเป็นอันตรายที่มักจะพบ</h3>
+                <span class="modal-close" id="closeHazardModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="category-list" id="hazardList">
+                    <li data-value="สารกัดกร่อน">สารกัดกร่อน</li>
+                    <li data-value="สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ">สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ</li>
+                    <li data-value="วัตถุไวไฟ (ถ้ามีส่วนผสมของแอลกอฮอล์) / สารกัดกร่อน">วัตถุไวไฟ (ถ้ามีส่วนผสมของแอลกอฮอล์) / สารกัดกร่อน</li>
+                    <li data-value="อันตรายต่อสิ่งแวดล้อมทางน้ำ / วัตถุไวไฟ">อันตรายต่อสิ่งแวดล้อมทางน้ำ / วัตถุไวไฟ</li>
+                    <li data-value="สารกัดกร่อน (ล้างคอยล์) / ก๊าซภายใต้ความดัน (สารทำความเย็น)">สารกัดกร่อน (ล้างคอยล์) / ก๊าซภายใต้ความดัน (สารทำความเย็น)</li>
+                    <li data-value="ก๊าซภายใต้ความดัน">ก๊าซภายใต้ความดัน</li>
+                    <li data-value="วัตถุไวไฟ (โดยเฉพาะสีน้ำมัน) / อันตรายต่อสิ่งแวดล้อมทางน้ำ">วัตถุไวไฟ (โดยเฉพาะสีน้ำมัน) / อันตรายต่อสิ่งแวดล้อมทางน้ำ</li>
+                    <li data-value="วัตถุไวไฟ / อันตรายต่อสุขภาพ">วัตถุไวไฟ / อันตรายต่อสุขภาพ</li>
+                    <li data-value="สารกัดกร่อน / อันตรายต่อสุขภาพ">สารกัดกร่อน / อันตรายต่อสุขภาพ</li>
+                    <li data-value="สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ">สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ</li>
+                    <li data-value="อันตรายต่อสิ่งแวดล้อมทางน้ำ / อันตรายต่อสุขภาพ">อันตรายต่อสิ่งแวดล้อมทางน้ำ / อันตรายต่อสุขภาพ</li>
+                    <li data-value="custom" style="font-weight: 600; color: #dc3545;">ไม่อยู่ในรายการ (ระบุเอง)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP (Modal) สำหรับระดับของผลกระทบ -->
+<div id="impactLevelModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>เลือกระดับของผลกระทบ</h3>
+            <span class="modal-close" id="closeImpactLevelModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ul class="category-list" id="impactLevelList">
+                <li data-value="ไม่เข้าข่ายเกณฑ์ MOC (MOC Not Required) ตรวจสอบแล้วเป็นเพียงการซ่อมบำรุงปกติ หรือใช้สเปกเดิม">ไม่เข้าข่ายเกณฑ์ MOC (MOC Not Required) ตรวจสอบแล้วเป็นเพียงการซ่อมบำรุงปกติ หรือใช้สเปกเดิม</li>
+                <li data-value="ไม่มีผลกระทบ (None) ไม่ส่งผลใดๆ ต่อความปลอดภัยและสิ่งแวดล้อม">ไม่มีผลกระทบ (None) ไม่ส่งผลใดๆ ต่อความปลอดภัยและสิ่งแวดล้อม</li>
+                <li data-value="ระดับต่ำ (Low) อาจเกิดผลกระทบเพียงเล็กน้อย สามารถควบคุมได้ด้วยวิธีปฏิบัติปกติ">ระดับต่ำ (Low) อาจเกิดผลกระทบเพียงเล็กน้อย สามารถควบคุมได้ด้วยวิธีปฏิบัติปกติ</li>
+                <li data-value="ระดับปานกลาง (Medium) มีโอกาสเกิดอันตรายหรือมลพิษ จำเป็นต้องมีมาตรการจัดการเพิ่มเติม">ระดับปานกลาง (Medium) มีโอกาสเกิดอันตรายหรือมลพิษ จำเป็นต้องมีมาตรการจัดการเพิ่มเติม</li>
+                <li data-value="ระดับสูง (High) เสี่ยงต่ออันตรายร้ายแรงหรือมลพิษรุนแรง ต้องควบคุมอย่างเข้มงวดก่อนดำเนินการ">ระดับสูง (High) เสี่ยงต่ออันตรายร้ายแรงหรือมลพิษรุนแรง ต้องควบคุมอย่างเข้มงวดก่อนดำเนินการ</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP (Modal) สำหรับสถานะการทบทวนการประเมิน -->
+<div id="reviewStatusModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>เลือกสถานะการทบทวนการประเมิน</h3>
+            <span class="modal-close" id="closeReviewStatusModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ul class="category-list" id="reviewStatusList">
+                <li data-value="ไม่ต้องทบทวนประเมินความเสี่ยงใหม่ การประเมินความเสี่ยงเดิมครอบคลุมการเปลี่ยนแปลงนี้แล้ว">ไม่ต้องทบทวนประเมินความเสี่ยงใหม่ การประเมินความเสี่ยงเดิมครอบคลุมการเปลี่ยนแปลงนี้แล้ว</li>
+                <li data-value="ต้องดำเนินการทบทวน/ประเมินความเสี่ยงใหม่ มีปัจจัยเสี่ยงใหม่ ต้องจัดทำแบบประเมินความเสี่ยง หรือประเด็นสิ่งแวดล้อมใหม่">ต้องดำเนินการทบทวน/ประเมินความเสี่ยงใหม่ มีปัจจัยเสี่ยงใหม่ ต้องจัดทำแบบประเมินความเสี่ยง หรือประเด็นสิ่งแวดล้อมใหม่</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 4. POPUP (Modal) สำหรับความจำเป็นในการนำเข้าที่ประชุมฯ -->
+<div id="meetingRequiredModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>เลือกความจำเป็นในการนำเข้าที่ประชุมฯ</h3>
+            <span class="modal-close" id="closeMeetingRequiredModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ul class="category-list" id="meetingRequiredList">
+                <li data-value="จำเป็น">จำเป็น</li>
+                <li data-value="ไม่จำเป็น">ไม่จำเป็น</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP (Modal) สำหรับเลือกเรื่องที่ดำเนินการ -->
+<div id="subjectModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>เลือกเรื่องที่ดำเนินการ</h3>
+            <span class="modal-close" id="closeSubjectModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <ul class="category-list" id="subjectList">
+                <!-- รายการเรื่องจะถูกดึงมาแสดงอัตโนมัติใน script.js -->
+                <li data-value="custom" style="font-weight: 600; color: #dc3545;">ไม่อยู่ในรายการ (ระบุเรื่องเอง)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
