@@ -1405,8 +1405,54 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
-
-
-
-
+// 2. ฟังก์ชันจับคู่และอัปเดตข้อมูล (ใช้ชื่อ ID ที่ถูกต้องจากระบบ)
+function updateHazardType() {
+    const sdsInput = document.getElementById('sdsNameInput'); 
+    const hazardInput = document.getElementById('hazardTypeInput'); 
+  
+    if (!sdsInput || !hazardInput) return;
+  
+    // ดึงค่าข้อความที่ได้จากการเลือกใน Popup
+    const selectedText = sdsInput.value.trim();
     
+    if (!selectedText) {
+        hazardInput.value = "";
+        return;
+    }
+  
+    // แยกข้อความสารเคมีด้วยเครื่องหมายลูกน้ำ (comma) ที่ระบบ Popup สร้างขึ้น
+    const selectedOptions = selectedText.split(',').map(item => item.trim());
+    
+    // ใช้ Set เพื่อป้องกันการแสดงผลประเภทอันตรายซ้ำกัน
+    const uniqueHazards = new Set();
+  
+    selectedOptions.forEach(chemical => {
+      if (hazardMapping[chemical]) {
+        // แยกประเภทอันตรายด้วย ' / ' เพื่อจัดกลุ่มใหม่
+        const hazards = hazardMapping[chemical].split(' / ');
+        hazards.forEach(h => uniqueHazards.add(h.trim()));
+      }
+    });
+  
+    // นำประเภทอันตรายที่รวมแล้วมาเชื่อมกันด้วย ' / '
+    hazardInput.value = Array.from(uniqueHazards).join(' / ');
+  }
+  
+  // 3. ผูกฟังก์ชันเข้ากับเหตุการณ์
+  document.addEventListener("DOMContentLoaded", function() {
+    const sdsInput = document.getElementById('sdsNameInput');
+    const btnConfirmSds = document.getElementById('btn_confirm_sds');
+    
+    if (sdsInput) {
+      // ให้ระบบทำการอัปเดตข้อมูลเมื่อมีการพิมพ์หรือเปลี่ยนแปลงค่า
+      sdsInput.addEventListener('input', updateHazardType);
+      sdsInput.addEventListener('change', updateHazardType);
+    }
+  
+    // เพื่อให้ทำงานได้สมบูรณ์กับ Popup ให้เรียกใช้ฟังก์ชันอัปเดตหลังจากกดยืนยันใน Popup ด้วย
+    if (btnConfirmSds) {
+        btnConfirmSds.addEventListener('click', () => {
+            setTimeout(updateHazardType, 100); // หน่วงเวลาเล็กน้อยเพื่อให้ Popup ใส่ค่าลง input ให้เสร็จก่อน
+        });
+    }
+  });

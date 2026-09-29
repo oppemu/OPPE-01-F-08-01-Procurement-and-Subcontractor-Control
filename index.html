@@ -80,85 +80,85 @@
                 </div>
 
                 <!-- Section 2: รายละเอียดงานและสัญญา -->
-                <div class="form-section">
-                    <h3>2. รายละเอียดงานและสัญญา</h3>
-                    <div class="grid-container">
-                        <div class="form-group">
-                            <label>สถานที่ดำเนินการ</label>
-                            <input type="text" id="locationInput" name="location" placeholder="คลิกเพื่อเลือกสถานที่" readonly style="cursor: pointer; background-color: #fff;">
-                        </div>
+<div class="form-section">
+    <h3>2. รายละเอียดงานและสัญญา</h3>
+    <div class="grid-container">
+        <div class="form-group">
+            <label>สถานที่ดำเนินการ</label>
+            <input type="text" id="locationInput" name="location" placeholder="คลิกเพื่อเลือกสถานที่" readonly style="cursor: pointer; background-color: #fff;">
+        </div>
 
-                        <!-- POPUP (Modal) สำหรับเลือกสถานที่ดำเนินการ -->
-    <div id="locationModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>เลือกสถานที่ดำเนินการ</h3>
-                <span class="modal-close" id="closeLocationModal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <ul class="category-list" id="locationList">
-                    <li data-value="สถานีไฟฟ้าย่อย">สถานีไฟฟ้าย่อย</li>
-                    <li data-value="ห้องปฏิบัติงานจราจร">ห้องปฏิบัติงานจราจร</li>
-                    <li data-value="อาคารบำบัดน้ำเสีย">อาคารบำบัดน้ำเสีย</li>
-                    <li data-value="อาคารเพาะชำ">อาคารเพาะชำ</li>
-                    <li data-value="อาคารศาลายา">อาคารศาลายา</li>
-                    <li data-value="อาคารอนุรักษ์">อาคารอนุรักษ์</li>
-                    <li data-value="MLC (ศูนย์การเรียนรู้มหิดล)">MLC (ศูนย์การเรียนรู้มหิดล)</li>
-                    <li data-value="PMH (มหิดลสิทธาคาร)">PMH (มหิดลสิทธาคาร)</li>
-                    <li data-value="SVD (สิริวิทยา)">SVD (สิริวิทยา)</li>
-                    <li data-value="อาคาร/พื้นที่กำกับกองกายภาพและสิ่งแวดล้อมฯ">อาคาร/พื้นที่กำกับกองกายภาพและสิ่งแวดล้อมฯ</li>
-                    <!-- เมื่อกดข้อนี้ จะยอมให้ผู้ใช้พิมพ์เองได้ -->
-                    <li data-value="custom" style="font-weight: 600; color: #dc3545;">พื้นที่ไม่อยู่ในรายการ (ระบุสถานที่เอง)</li>
-                </ul>
+        <!-- POPUP (Modal) สำหรับเลือกสถานที่ดำเนินการ -->
+        <div id="locationModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>เลือกสถานที่ดำเนินการ</h3>
+                    <span class="modal-close" id="closeLocationModal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <ul class="category-list" id="locationList">
+                        <li data-value="สถานีไฟฟ้าย่อย">สถานีไฟฟ้าย่อย</li>
+                        <li data-value="ห้องปฏิบัติงานจราจร">ห้องปฏิบัติงานจราจร</li>
+                        <li data-value="อาคารบำบัดน้ำเสีย">อาคารบำบัดน้ำเสีย</li>
+                        <li data-value="อาคารเพาะชำ">อาคารเพาะชำ</li>
+                        <li data-value="อาคารศาลายา">อาคารศาลายา</li>
+                        <li data-value="อาคารอนุรักษ์">อาคารอนุรักษ์</li>
+                        <li data-value="MLC (ศูนย์การเรียนรู้มหิดล)">MLC (ศูนย์การเรียนรู้มหิดล)</li>
+                        <li data-value="PMH (มหิดลสิทธาคาร)">PMH (มหิดลสิทธาคาร)</li>
+                        <li data-value="SVD (สิริวิทยา)">SVD (สิริวิทยา)</li>
+                        <li data-value="อาคาร/พื้นที่กำกับกองกายภาพและสิ่งแวดล้อมฯ">อาคาร/พื้นที่กำกับกองกายภาพและสิ่งแวดล้อมฯ</li>
+                        <!-- เมื่อกดข้อนี้ จะยอมให้ผู้ใช้พิมพ์เองได้ -->
+                        <li data-value="custom" style="font-weight: 600; color: #dc3545;">พื้นที่ไม่อยู่ในรายการ (ระบุสถานที่เอง)</li>
+                    </ul>
+                </div>
             </div>
         </div>
+
+        <!-- ปรับช่องหมวดหมู่งานให้เปิด Popup -->
+        <div class="form-group">
+            <label>หมวดหมู่งาน</label>
+            <input type="text" id="categoryInput" name="category" placeholder="คลิกเพื่อเลือกหมวดหมู่งาน" readonly style="cursor: pointer; background-color: #fff;">
+        </div>
+
+        <div class="form-group">
+            <label>ชื่อ-รหัส-ระเบียบปฏิบัติ (P/WI)</label>
+            <input type="text" id="pwiInput" name="pwiCode" placeholder="พิมพ์ระบุ P/WI">
+        </div>
+
+        <div class="form-group">
+            <label>เรื่องที่ดำเนินการ</label>
+            <input type="text" id="subject" name="subject" placeholder="คลิกเพื่อเลือกเรื่องที่ดำเนินการ" readonly style="cursor: pointer; background-color: #fff;">
+        </div>
+
+        <div class="form-group"><label>ชื่อบริษัทดำเนินการ</label><input type="text" name="companyName"></div>
+        <div class="form-group"><label>วันที่เริ่มสัญญา</label><input type="text" id="contractStart" name="contractStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
+        <div class="form-group"><label>สิ้นสุดสัญญา</label><input type="text" id="contractEnd" name="contractEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
+        <div class="form-group"><label>จำนวนวันตามสัญญา</label><input type="number" id="contractDays" name="contractDays" readonly class="readonly-input"></div>
+        
+        <!-- เพิ่ม id="contractValue" ตรงนี้ -->
+        <div class="form-group"><label>มูลค่าเงิน(ทั้งสัญญา)</label><input type="number" id="contractValue" name="contractValue" placeholder="บาท"></div>
+        
+        <div class="form-group"><label>เข้าทำงานตามสัญญา (ครั้งทั้งหมด)</label><input type="number" id="contractVisits" name="contractVisits" placeholder="เช่น 12"></div>
+        <div class="form-group"><label>เข้าดำเนินการครั้งที่</label><input type="text" id="currentVisit" name="currentVisit" placeholder="คำนวณอัตโนมัติ (เช่น 1/12)" readonly class="readonly-input"></div>
+        
+        <!-- เพิ่ม id, เปลี่ยนเป็น text, และใส่ readonly class="readonly-input" ตรงนี้ -->
+        <div class="form-group"><label>คิดเป็นเงินสะสม</label><input type="text" id="accumulatedMoney" name="accumulatedMoney" placeholder="บาท" readonly class="readonly-input"></div>
+        
+        <div class="form-group"><label>วันที่เข้าดำเนินการ</label><input type="text" id="workStart" name="workStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
+        <div class="form-group"><label>วันที่ดำเนินการแล้วเสร็จ</label><input type="text" id="workEnd" name="workEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
+        <div class="form-group"><label>จำนวนวันที่ใช้ดำเนินการ</label><input type="number" id="workDays" name="workDays" readonly class="readonly-input"></div>
+        <div class="form-group"><label>คนปฏิบัติงานตามสัญญา</label><input type="number" name="expectedWorkers"></div>
+        <div class="form-group"><label>คนที่มาปฏิบัติงานจริง</label><input type="number" name="actualWorkers"></div>
     </div>
+</div>
 
-                        <!-- ปรับช่องหมวดหมู่งานให้เปิด Popup -->
-                        <div class="form-group">
-                            <label>หมวดหมู่งาน</label>
-                            <input type="text" id="categoryInput" name="category" placeholder="คลิกเพื่อเลือกหมวดหมู่งาน" readonly style="cursor: pointer; background-color: #fff;">
-                        </div>
-
-                        <div class="form-group">
-                            <label>ชื่อ-รหัส-ระเบียบปฏิบัติ (P/WI)</label>
-                            <input type="text" id="pwiInput" name="pwiCode" placeholder="พิมพ์ระบุ P/WI">
-                        </div>
-
-                        <div class="form-group">
-                            <label>เรื่องที่ดำเนินการ</label>
-                            <input type="text" id="subject" name="subject" placeholder="คลิกเพื่อเลือกเรื่องที่ดำเนินการ" readonly style="cursor: pointer; background-color: #fff;">
-                        </div>
-
-                        <div class="form-group"><label>ชื่อบริษัทดำเนินการ</label><input type="text" name="companyName"></div>
-                        <div class="form-group"><label>วันที่เริ่มสัญญา</label><input type="text" id="contractStart" name="contractStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>สิ้นสุดสัญญา</label><input type="text" id="contractEnd" name="contractEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>จำนวนวันตามสัญญา</label><input type="number" id="contractDays" name="contractDays" readonly class="readonly-input"></div>
-                        <div class="form-group"><label>มูลค่าสัญญา (เงิน)</label><input type="number" name="contractValue" placeholder="บาท"></div>
-                        <div class="form-group"><label>เข้าทำงานตามสัญญา (ครั้งทั้งหมด)</label><input type="number" id="contractVisits" name="contractVisits" placeholder="เช่น 12"></div>
-                        <div class="form-group"><label>เข้าดำเนินการครั้งที่</label><input type="text" id="currentVisit" name="currentVisit" placeholder="คำนวณอัตโนมัติ (เช่น 1/12)" readonly class="readonly-input"></div>
-                        <div class="form-group"><label>คิดเป็นเงินสะสม</label><input type="number" name="accumulatedMoney" placeholder="บาท"></div>
-                    </div>
-                </div>
+                
 
                 <!-- Section 3: การดำเนินงานจริง -->
                 <div class="form-section">
-                    <h3>3. การดำเนินงานจริง</h3>
+                    <h3>3.การคัดกรองบุคคลก่อนเข้าพื้นที่และการควบคุมความปลอดภัย</h3>
                     <div class="grid-container">
-                        <div class="form-group"><label>วันที่เข้าดำเนินการ</label><input type="text" id="workStart" name="workStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>วันที่ดำเนินการแล้วเสร็จ</label><input type="text" id="workEnd" name="workEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>จำนวนวันที่ใช้ดำเนินการ</label><input type="number" id="workDays" name="workDays" readonly class="readonly-input"></div>
-                        <div class="form-group"><label>คนปฏิบัติงานตามสัญญา</label><input type="number" name="expectedWorkers"></div>
-                        <div class="form-group"><label>คนที่มาปฏิบัติงานจริง</label><input type="number" name="actualWorkers"></div>
-                    </div>
-                </div>
-
-                <!-- Section 4: ความปลอดภัยและสิ่งแวดล้อม -->
-<div class="form-section">
-    <h3>4. ความปลอดภัยและสิ่งแวดล้อม</h3>
-    <div class="grid-container grid-3-cols">
-        
-        <!-- รวมช่องตัวเลือกทั้งหมดเรียงต่อกันใน Grid 3 คอลัมน์ -->
+                                <!-- รวมช่องตัวเลือกทั้งหมดเรียงต่อกันใน Grid 3 คอลัมน์ -->
         <div class="form-group">
             <label>ประเภทการตรวจสุขภาพ</label>
             <input type="text" id="healthCheckTypeInput" name="healthCheckType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
@@ -208,6 +208,14 @@
             <label>ระบุชื่อสารเคมีที่ใช้ *เลือกได้หลายรายการ</label>
             <input type="text" id="sdsNameInput" name="sdsName" placeholder="คลิกเพื่อเลือกสารเคมี" readonly class="popup-input">
         </div>
+
+                    </div>
+                </div>
+
+                <!-- Section 4: ความปลอดภัยและสิ่งแวดล้อม -->
+<div class="form-section">
+    <h3>4.การจัดการการเปลี่ยนแปลง Management of Change (MOC)</h3>
+    <div class="grid-container grid-3-cols">
 
         <div class="form-group">
             <label>ประเภทความเป็นอันตรายที่มักจะพบ</label>
@@ -528,7 +536,6 @@
     </div>
 </div>
 
-    
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
     <script src="config.js"></script>
