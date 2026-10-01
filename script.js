@@ -11,20 +11,21 @@ document.addEventListener("DOMContentLoaded", () => {
         "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
     ];
 
-    // 1. รูปแบบภาษาไทยเต็ม สำหรับแสดงบนหน้าเว็บ
     const displayThaiDate = `${day} ${monthNamesThai[month]} ${yearBE}`;
-    if (document.getElementById('displayThaiDateInput')) {
-        document.getElementById('displayThaiDateInput').value = displayThaiDate;
-    }
+
+if (document.getElementById('displayThaiDateInput')) {
+    document.getElementById('displayThaiDateInput').value = displayThaiDate;
+}
 
     // 2. รูปแบบ DD/MM/YYYY สำหรับส่งเข้า Google Sheet (ซ่อนไว้)
     const formattedDay = String(day).padStart(2, '0');
     const formattedMonth = String(month + 1).padStart(2, '0');
     const sheetDate = `${formattedDay}/${formattedMonth}/${yearCE}`;
     
-    if (document.getElementById('entryDate')) {
-        document.getElementById('entryDate').value = sheetDate;
-    }
+    // ปรับตรงนี้ให้ส่งรูปแบบภาษาไทยเต็มเข้า Google Sheet
+if (document.getElementById('entryDate')) {
+    document.getElementById('entryDate').value = displayThaiDate;
+}
 
     // ==========================================
     // ส่วนจัดการ POPUP สถานที่ดำเนินการ
@@ -238,6 +239,27 @@ async function submitForm() {
     const data = {};
     formData.forEach((value, key) => { data[key] = value; });
 
+    // แปลงค่าวันที่ทั้ง 4 ช่องให้อยู่ในรูปแบบภาษาไทยเต็ม (เช่น 1 กันยายน 2569)
+    const dateInputIds = ['contractStart', 'contractEnd', 'workStart', 'workEnd'];
+    dateInputIds.forEach(id => {
+        const input = document.getElementById(id);
+        if (input && input.getAttribute('data-date')) {
+            const parts = input.getAttribute('data-date').split('-'); // YYYY-MM-DD
+            if (parts.length === 3) {
+                const dayNum = parseInt(parts[2], 10);
+                const monthNum = parseInt(parts[1], 10) - 1;
+                const yearBE = parseInt(parts[0], 10) + 543;
+                data[id] = `${dayNum} ${monthNamesThai[monthNum]} ${yearBE}`;
+            }
+        } else if (input && input.value) {
+            data[id] = input.value;
+        }
+    });
+
+    // วันที่กรอกข้อมูลให้เป็นภาษาไทยเต็มด้วย
+    const now = new Date();
+    data['entryDate'] = `${now.getDate()} ${monthNamesThai[now.getMonth()]} ${now.getFullYear() + 543}`;
+
     submitBtn.disabled = true;
     submitBtn.innerText = 'กำลังบันทึกข้อมูล...';
 
@@ -256,11 +278,13 @@ async function submitForm() {
             resetEmail();
             document.getElementById('startEmail').value = '';
             
-            const now = new Date();
+            const resetNow = new Date();
+            const resetThaiDate = `${resetNow.getDate()} ${monthNamesThai[resetNow.getMonth()]} ${resetNow.getFullYear() + 543}`;
             if (document.getElementById('entryDate')) {
-                const day = String(now.getDate()).padStart(2, '0');
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                document.getElementById('entryDate').value = `${day}/${month}/${now.getFullYear()}`;
+                document.getElementById('entryDate').value = resetThaiDate;
+            }
+            if (document.getElementById('displayThaiDateInput')) {
+                document.getElementById('displayThaiDateInput').value = resetThaiDate;
             }
         } else {
             alert('❌ เกิดข้อผิดพลาด: ' + result.message);
@@ -274,95 +298,45 @@ async function submitForm() {
     }
 }
 
-async function fetchAndPopulateContractData() {
+async function updateVisitCount() {
     const subjectInput = document.getElementById('subject');
-    const companyNameInput = document.getElementById('companyName');
-    const contractStartInput = document.getElementById('contractStart');
-    const contractEndInput = document.getElementById('contractEnd');
-    const contractDaysInput = document.getElementById('contractDays');
-    const contractValueInput = document.getElementById('contractValue');
     const contractVisitsInput = document.getElementById('contractVisits');
     const currentVisitInput = document.getElementById('currentVisit');
 
-    const subject = subjectInput ? subjectInput.value.trim() : '';
+    const subject = subjectInput.value.trim();
+    const totalVisits = contractVisitsInput.value.trim() || '?';
 
     if (!subject) {
-        if (currentVisitInput) currentVisitInput.value = '';
+        currentVisitInput.value = '';
+        calculateAccumulatedMoney(); // เคลียร์เงินสะสมถ้าไม่ได้เลือกเรื่อง
         return;
     }
 
-    if (currentVisitInput) currentVisitInput.value = 'กำลังนับ...';
+    currentVisitInput.value = 'กำลังนับ...';
 
     try {
-        // 1. ดึงข้อมูลรายละเอียดสัญญาเดิม (บริษัท, วันที่เริ่ม-จบ, มูลค่า, จำนวนครั้ง)
-        const contractResponse = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getContractDetails&subject=${encodeURIComponent(subject)}`);
-        const contractResult = await contractResponse.json();
-
-        if (contractResult.status === 'success' && contractResult.data) {
-            const data = contractResult.data;
-            if (companyNameInput && data.companyName) companyNameInput.value = data.companyName;
-            if (contractStartInput && data.contractStart) {
-                contractStartInput.value = data.contractStart;
-                contractStartInput.setAttribute('data-date', data.contractStart);
-            }
-            if (contractEndInput && data.contractEnd) {
-                contractEndInput.value = data.contractEnd;
-                contractEndInput.setAttribute('data-date', data.contractEnd);
-            }
-            if (contractDaysInput && data.contractDays) contractDaysInput.value = data.contractDays;
-            if (contractValueInput && data.contractValue) contractValueInput.value = data.contractValue;
-            if (contractVisitsInput && data.contractVisits) contractVisitsInput.value = data.contractVisits;
-
-            // คำนวณจำนวนวันตามสัญญาทันที
-            if (typeof calculateDays === 'function') {
-                calculateDays('contractStart', 'contractEnd', 'contractDays');
-            }
-        }
-
-        // 2. ดึงจำนวนครั้งที่เคยเข้าดำเนินการ เพื่อคำนวณรอบปัจจุบัน (เช่น 2/12)
-        const visitResponse = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getVisitCount&subject=${encodeURIComponent(subject)}`);
-        const visitResult = await visitResponse.json();
-
-        const totalVisits = (contractVisitsInput && contractVisitsInput.value.trim()) || '?';
-        if (visitResult.status === 'success') {
-            const nextVisitNumber = visitResult.count + 1;
-            if (currentVisitInput) currentVisitInput.value = `${nextVisitNumber}/${totalVisits}`;
+        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getVisitCount&subject=${encodeURIComponent(subject)}`);
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            const nextVisitNumber = result.count + 1;
+            currentVisitInput.value = `${nextVisitNumber}/${totalVisits}`;
         } else {
-            if (currentVisitInput) currentVisitInput.value = `1/${totalVisits}`;
+            currentVisitInput.value = `1/${totalVisits}`;
         }
-
-        // 3. คำนวณเงินสะสมอัตโนมัติ
-        calculateAccumulatedMoney();
-
     } catch (error) {
-        console.error('Error fetching contract data:', error);
-        if (currentVisitInput) currentVisitInput.value = `1/${(contractVisitsInput && contractVisitsInput.value.trim()) || '?'}`;
+        console.error('Error fetching visit count:', error);
+        currentVisitInput.value = `1/${totalVisits}`;
+    } finally {
+        // คำนวณเงินสะสมอัตโนมัติหลังจากนับครั้งเสร็จสิ้น
+        calculateAccumulatedMoney();
     }
 }
 
-// ฟังก์ชันคำนวณเงินสะสมอัตโนมัติ
-function calculateAccumulatedMoney() {
-    const contractValueInput = document.getElementById('contractValue');
-    const contractVisitsInput = document.getElementById('contractVisits');
-    const currentVisitInput = document.getElementById('currentVisit');
-    const accumulatedMoneyInput = document.getElementById('accumulatedMoney');
+document.getElementById('subject').addEventListener('blur', updateVisitCount);
+document.getElementById('contractVisits').addEventListener('blur', updateVisitCount);
 
-    if (!contractValueInput || !contractVisitsInput || !currentVisitInput || !accumulatedMoneyInput) return;
-
-    const totalValue = parseFloat(contractValueInput.value) || 0;
-    const totalVisits = parseFloat(contractVisitsInput.value) || 0;
-    const currentVisitText = currentVisitInput.value;
-
-    if (totalValue > 0 && totalVisits > 0 && currentVisitText.includes('/')) {
-        const currentVisitNum = parseFloat(currentVisitText.split('/')[0]) || 0;
-        const accumulated = (totalValue / totalVisits) * currentVisitNum;
-        accumulatedMoneyInput.value = accumulated.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-}
-
-document.getElementById('subject').addEventListener('change', fetchAndPopulateContractData);
-document.getElementById('contractValue')?.addEventListener('input', calculateAccumulatedMoney);
-document.getElementById('contractVisits')?.addEventListener('input', fetchAndPopulateContractData);
+document.getElementById('contractVisits').addEventListener('input', () => {
     const currentVisitInput = document.getElementById('currentVisit');
     const totalVisits = document.getElementById('contractVisits').value.trim() || '?';
     
@@ -370,7 +344,7 @@ document.getElementById('contractVisits')?.addEventListener('input', fetchAndPop
         const currentCount = currentVisitInput.value.split('/')[0];
         currentVisitInput.value = `${currentCount}/${totalVisits}`;
     }
-
+});
 // ==========================================
     // ฐานข้อมูล P/WI ตามหมวดหมู่งาน (1 - 13)
     // ==========================================
@@ -712,14 +686,17 @@ document.getElementById('contractVisits')?.addEventListener('input', fetchAndPop
 
             dayCell.addEventListener('click', () => {
                 if (activeDateInput) {
-                    // 1. สร้างวันที่ภาษาไทยเต็ม
-                    const thaiDateStr = `${day} ${monthNamesThai[month]} ${year + 543}`;
-                    activeDateInput.value = thaiDateStr; // แสดงผลให้คนดู
+                    // 1. สร้างวันที่ภาษาไทยแบบเต็ม (เช่น 1 กันยายน 2569)
+                    const yearBE = year + 543;
+                    const thaiDateStr = `${day} ${monthNamesThai[month]} ${yearBE}`;
                     
-                    // 2. ซ่อนค่า ค.ศ. ไว้ข้างหลังเพื่อให้ระบบเอาไปคำนวณต่อได้
+                    // 2. แสดงผลรูปแบบภาษาไทยเต็มลงในช่อง
+                    activeDateInput.value = thaiDateStr;
+                    
+                    // 3. เก็บค่า YYYY-MM-DD ซ่อนไว้ใน attribute เพื่อใช้คำนวณจำนวนวัน
                     activeDateInput.setAttribute('data-date', dateStr);
                     
-                    // 3. สั่งคำนวณวัน
+                    // 4. สั่งคำนวณวัน
                     if (activeDateInput.id === 'contractStart' || activeDateInput.id === 'contractEnd') {
                         calculateDays('contractStart', 'contractEnd', 'contractDays');
                     } else if (activeDateInput.id === 'workStart' || activeDateInput.id === 'workEnd') {
@@ -753,12 +730,13 @@ const hseData = {
     sdsStatusInput: ["ไม่อนุมัติ / สารเคมีห้ามใช้", "รออนุมัติใช้งาน / รอตรวจสอบ", "อนุมัติให้ใช้ (มี SDS ฉบับปรับปรุงล่าสุด)", "SDS หมดอายุ / ต้องขอฉบับใหม่จากผู้ผลิต (ต้องทบทวนทุก 3-5 ปี)"],
 
     // --- เพิ่ม 3 รายการใหม่ตรงนี้ ---
+    // ... (โค้ดก่อนหน้า)
     impactCharacterInput: [
         "ไม่มีผลกระทบ (None) ไม่ส่งผลใดๆ ต่อความปลอดภัยและสิ่งแวดล้อม",
         "ด้านความปลอดภัยและอาชีวอนามัย (OH&S) เสี่ยงต่อการบาดเจ็บ โรคจากการทำงาน อัคคีภัย หรือกระทบสภาพแวดล้อม (แสง เสียง ความร้อน)",
         "ด้านสิ่งแวดล้อม (Environment) เสี่ยงต่อสารเคมีรั่วไหล น้ำเสีย มลพิษทางอากาศ หรือกากของเสียเพิ่มขึ้น"
     ],
-    changeTypeDetailInput: [
+    changeTypeInput: [
         "ไม่เข้าข่ายเกณฑ์ MOC (MOC Not Required) ตรวจสอบแล้วเป็นเพียงการซ่อมบำรุงปกติ หรือใช้สเปกเดิม",
         "การเปลี่ยนแปลงแบบถาวร (Permanent) เปลี่ยนแปลงแล้วใช้งานตลอดไป ไม่กลับไปใช้แบบเดิม",
         "การเปลี่ยนแปลงแบบชั่วคราว (Temporary) เปลี่ยนแปลงเฉพาะช่วงเวลาที่กำหนด เมื่อครบกำหนดจะกลับไปใช้แบบเดิม",
@@ -879,7 +857,9 @@ const hseData = {
             inputEl.blur();
         });
 
-        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        }
 
         btn.addEventListener('click', () => {
             const checkedBoxes = modal.querySelectorAll('input[type="checkbox"]:checked');
@@ -898,21 +878,22 @@ const hseData = {
                 }
             });
 
-            // อัปเดตช่องอันตรายอัตโนมัติ (เฉพาะสารเคมี)
+            // อัปเดตช่องอันตรายอัตโนมัติ (เฉพาะสารเคมี) - เพิ่มการเช็คเพื่อไม่ให้โค้ดค้าง
             if (isChemical) {
                 const hazardInput = document.getElementById('hazardTypeInput');
-                if (hasCustom) hazards.push("อันตรายต่อสิ่งแวดล้อมทางน้ำ / อันตรายต่อสุขภาพ");
-                
-                // กรองข้อมูลไม่ให้ซ้ำกัน (Deduplicate)
-                let uniqueHazards = [...new Set(hazards)];
-                hazardInput.value = uniqueHazards.join(', ');
+                if (hazardInput) {
+                    if (hasCustom) hazards.push("อันตรายต่อสิ่งแวดล้อมทางน้ำ / อันตรายต่อสุขภาพ");
+                    
+                    // กรองข้อมูลไม่ให้ซ้ำกัน (Deduplicate)
+                    let uniqueHazards = [...new Set(hazards)];
+                    hazardInput.value = uniqueHazards.join(', ');
+                }
             }
 
             // จัดการกรณีเลือก "อื่นๆ" ในแบบ Multi-select
             if (hasCustom) {
                 inputEl.removeAttribute('readonly');
                 inputEl.classList.add('custom-red-placeholder');
-                // เอาค่าที่เลือกมาใส่เป็นตัวตั้งต้น และให้พิมพ์ต่อได้
                 inputEl.value = selectedVals.length > 0 ? selectedVals.join(', ') + ', ' : '';
                 inputEl.placeholder = 'อื่นๆ โปรดระบุ...';
                 inputEl.focus();
@@ -1270,12 +1251,17 @@ if (subjectInput && subjectModal) {
                         subjectInput.focus();
                     } else {
                         subjectInput.setAttribute('readonly', 'true');
-                        subjectInput.style.cursor = 'pointer';
-                        subjectInput.value = val || this.textContent.trim();
-                        
-                        // เรียกดึงข้อมูลสัญญาและคำนวณรอบเข้าทำงานอัตโนมัติ
-if (typeof fetchAndPopulateContractData === 'function') {
-    fetchAndPopulateContractData();
+subjectInput.style.cursor = 'pointer';
+subjectInput.value = val || this.textContent.trim();
+
+// เรียกคำนวณนับครั้งอัตโนมัติ
+if (typeof updateVisitCount === 'function') {
+    updateVisitCount();
+}
+
+// === เพิ่มบรรทัดนี้ เพื่อดึงข้อมูลสัญญาและจำนวนวันมาลงให้อัตโนมัติ ===
+if (typeof fetchContractDetails === 'function') {
+    fetchContractDetails(subjectInput.value);
 }
                     }
 
@@ -1415,149 +1401,236 @@ const hazardMapping = {
   "อื่นๆ (โปรดระบุ)": ""
 };
 
-// 2. ฟังก์ชันจับคู่และอัปเดตข้อมูล (ใช้ชื่อ ID ที่ถูกต้องจากระบบ)
+// 2. ฟังก์ชันจับคู่และอัปเดตข้อมูล
 function updateHazardType() {
-    const sdsInput = document.getElementById('sdsNameInput'); 
-    const hazardInput = document.getElementById('hazardTypeInput'); 
+  // สมมติว่า ID ของช่องเลือกสารเคมีคือ 'sdsName'
+  // หากใช้ ID อื่น ให้เปลี่ยนตรงนี้
+  const sdsSelect = document.getElementById('sdsName'); 
   
-    if (!sdsInput || !hazardInput) return;
+  // สมมติว่า ID ของช่องประเภทอันตรายคือ 'hazardType'
+  const hazardInput = document.getElementById('hazardType'); 
+
+  if (!sdsSelect || !hazardInput) return;
+
+  // ดึงค่าทั้งหมดที่ถูกเลือก (รองรับการเลือกหลายรายการ)
+  const selectedOptions = Array.from(sdsSelect.selectedOptions).map(opt => opt.value);
   
-    // ดึงค่าข้อความที่ได้จากการเลือกใน Popup
-    const selectedText = sdsInput.value.trim();
-    
-    if (!selectedText) {
-        hazardInput.value = "";
-        return;
-    }
-  
-    // แยกข้อความสารเคมีด้วยเครื่องหมายลูกน้ำ (comma) ที่ระบบ Popup สร้างขึ้น
-    const selectedOptions = selectedText.split(',').map(item => item.trim());
-    
-    // ใช้ Set เพื่อป้องกันการแสดงผลประเภทอันตรายซ้ำกัน
-    const uniqueHazards = new Set();
-  
-    selectedOptions.forEach(chemical => {
-      if (hazardMapping[chemical]) {
-        // แยกประเภทอันตรายด้วย ' / ' เพื่อจัดกลุ่มใหม่
-        const hazards = hazardMapping[chemical].split(' / ');
-        hazards.forEach(h => uniqueHazards.add(h.trim()));
-      }
-    });
-  
-    // นำประเภทอันตรายที่รวมแล้วมาเชื่อมกันด้วย ' / '
-    hazardInput.value = Array.from(uniqueHazards).join(' / ');
-  }
-  
-  // 3. ผูกฟังก์ชันเข้ากับเหตุการณ์
-  document.addEventListener("DOMContentLoaded", function() {
-    const sdsInput = document.getElementById('sdsNameInput');
-    const btnConfirmSds = document.getElementById('btn_confirm_sds');
-    
-    if (sdsInput) {
-      // ให้ระบบทำการอัปเดตข้อมูลเมื่อมีการพิมพ์หรือเปลี่ยนแปลงค่า
-      sdsInput.addEventListener('input', updateHazardType);
-      sdsInput.addEventListener('change', updateHazardType);
-    }
-  
-    // เพื่อให้ทำงานได้สมบูรณ์กับ Popup ให้เรียกใช้ฟังก์ชันอัปเดตหลังจากกดยืนยันใน Popup ด้วย
-    if (btnConfirmSds) {
-        btnConfirmSds.addEventListener('click', () => {
-            setTimeout(updateHazardType, 100); // หน่วงเวลาเล็กน้อยเพื่อให้ Popup ใส่ค่าลง input ให้เสร็จก่อน
-        });
+  // ใช้ Set เพื่อป้องกันการแสดงผลประเภทอันตรายซ้ำกัน
+  const uniqueHazards = new Set();
+
+  selectedOptions.forEach(chemical => {
+    if (hazardMapping[chemical]) {
+      // แยกประเภทอันตรายด้วย ' / ' เพื่อจัดกลุ่มใหม่
+      const hazards = hazardMapping[chemical].split(' / ');
+      hazards.forEach(h => uniqueHazards.add(h.trim()));
     }
   });
-  // ฟังก์ชันช่วยแปลงวันที่จาก พ.ศ. (DD/MM/YYYY) เป็น ค.ศ. (YYYY-MM-DD) เพื่อให้ระบบคำนวณวันได้
-function convertToISODate(dateStr) {
-    if (!dateStr) return '';
-    // กรณีที่ดึงมาเป็น DD/MM/YYYY
-    if (dateStr.includes('/')) {
-        const parts = dateStr.split('/');
-        if (parts.length === 3) {
-            let d = parts[0].padStart(2, '0');
-            let m = parts[1].padStart(2, '0');
-            let y = parseInt(parts[2], 10);
-            if (y > 2500) y -= 543; // แปลง พ.ศ. เป็น ค.ศ. สำหรับไว้คำนวณหลังบ้าน
-            return `${y}-${m}-${d}`;
-        }
-    }
-    // กรณีที่มี - อยู่แล้ว
-    if (dateStr.includes('-')) {
-        return dateStr.split('T')[0];
-    }
-    return '';
+
+  // นำประเภทอันตรายที่รวมแล้วมาเชื่อมกันด้วย ' / ' เหมือนเดิม
+  hazardInput.value = Array.from(uniqueHazards).join(' / ');
+
+  // กรณีที่ช่อง hazardType ใช้ปลั๊กอินอย่าง Select2 อาจต้องกระตุ้นอีเวนต์ change ด้วย
+  // $(hazardInput).trigger('change'); 
 }
 
-// แทนที่ฟังก์ชันเดิมด้วยตัวนี้ทั้งหมด
-async function fetchAndPopulateContractData() {
-    const subjectInput = document.getElementById('subject');
-    const companyNameInput = document.getElementById('companyName');
-    const contractStartInput = document.getElementById('contractStart');
-    const contractEndInput = document.getElementById('contractEnd');
-    const contractDaysInput = document.getElementById('contractDays');
-    const contractValueInput = document.getElementById('contractValue');
-    const contractVisitsInput = document.getElementById('contractVisits');
-    const currentVisitInput = document.getElementById('currentVisit');
+// 3. ผูกฟังก์ชันเข้ากับเหตุการณ์ (Event Listener) เมื่อมีการเปลี่ยนค่า
+document.addEventListener("DOMContentLoaded", function() {
+  const sdsSelect = document.getElementById('sdsName');
+  if (sdsSelect) {
+    // ใช้กับ HTML Select ทั่วไป
+    sdsSelect.addEventListener('change', updateHazardType);
+    
+    // **หมายเหตุ:** หากคุณใช้ปลั๊กอิน Select2 (จากหน้าตาในรูป) จะต้องใช้ jQuery จับ Event แทนแบบนี้:
+    // $('#sdsName').on('change', updateHazardType);
+  }
+});
 
-    const subject = subjectInput ? subjectInput.value.trim() : '';
-
-    if (!subject) {
-        if (currentVisitInput) currentVisitInput.value = '';
-        return;
-    }
-
-    if (currentVisitInput) currentVisitInput.value = 'กำลังนับ...';
+async function fetchContractDetails(subject) {
+    if (!subject || !CONFIG || !CONFIG.GOOGLE_SCRIPT_URL) return;
 
     try {
-        // 1. ดึงข้อมูลรายละเอียดสัญญาเดิม
-        const contractResponse = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getContractDetails&subject=${encodeURIComponent(subject)}`);
-        const contractResult = await contractResponse.json();
+        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getContractDetails&subject=${encodeURIComponent(subject)}`);
+        const result = await response.json();
 
-        if (contractResult.status === 'success' && contractResult.data) {
-            const data = contractResult.data;
-            if (companyNameInput && data.companyName) companyNameInput.value = data.companyName;
+        if (result.status === 'success' && result.data) {
+            if (document.getElementsByName('companyName')[0]) document.getElementsByName('companyName')[0].value = result.data.companyName || '';
+            if (document.getElementById('contractStart')) document.getElementById('contractStart').value = result.data.contractStart || '';
+            if (document.getElementById('contractEnd')) document.getElementById('contractEnd').value = result.data.contractEnd || '';
+            if (document.getElementById('contractDays')) document.getElementById('contractDays').value = result.data.contractDays || '';
             
-            // ใส่ค่าวันที่ และซ่อนวันที่แบบ ค.ศ. ไว้ให้ระบบคำนวณ
-            if (contractStartInput && data.contractStart) {
-                contractStartInput.value = data.contractStart; 
-                contractStartInput.setAttribute('data-date', convertToISODate(data.contractStart)); 
+            const valInput = document.getElementById('contractValue') || document.getElementsByName('contractValue')[0];
+            if (valInput) valInput.value = result.data.contractValue || '';
+
+            if (document.getElementById('contractVisits')) {
+                document.getElementById('contractVisits').value = result.data.contractVisits || '';
             }
-            if (contractEndInput && data.contractEnd) {
-                contractEndInput.value = data.contractEnd;
-                contractEndInput.setAttribute('data-date', convertToISODate(data.contractEnd));
-            }
-            
-            if (contractDaysInput && data.contractDays) contractDaysInput.value = data.contractDays;
-            if (contractValueInput && data.contractValue) contractValueInput.value = data.contractValue;
-            if (contractVisitsInput && data.contractVisits) contractVisitsInput.value = data.contractVisits;
 
-            // สั่งให้คำนวณจำนวนวันตามสัญญาเดี๋ยวนั้นเลย
-            if (typeof calculateDays === 'function') {
-                calculateDays('contractStart', 'contractEnd', 'contractDays');
-            }
+            // อัปเดตการนับครั้งและคำนวณเงินสะสมอัตโนมัติ
+            await updateVisitCount();
         }
-
-        // 2. ดึงจำนวนครั้งที่เคยเข้าดำเนินการ
-        const visitResponse = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getVisitCount&subject=${encodeURIComponent(subject)}`);
-        const visitResult = await visitResponse.json();
-
-        const totalVisits = (contractVisitsInput && contractVisitsInput.value.trim()) || '?';
-        let currentCount = 1;
-
-        if (visitResult.status === 'success') {
-            currentCount = visitResult.count + 1; // นับข้อมูลเก่า แล้วบวก 1 เป็นรอบปัจจุบัน
-        }
-
-        if (currentVisitInput) {
-            currentVisitInput.value = `${currentCount}/${totalVisits}`;
-        }
-
-        // 3. คำนวณเงินสะสมอัตโนมัติ
-        calculateAccumulatedMoney();
-
     } catch (error) {
-        console.error('Error fetching contract data:', error);
-        const fallbackTotal = (contractVisitsInput && contractVisitsInput.value.trim()) || '?';
-        if (currentVisitInput) currentVisitInput.value = `1/${fallbackTotal}`;
+        console.error("Error fetching contract details:", error);
     }
 }
-  
+// ฟังก์ชันช่วยแปลงรูปแบบวันที่ทุกประเภทให้เป็นภาษาไทยรูปแบบเต็ม
+function parseAndFormatThaiDate(dateStr) {
+    if (!dateStr) return { thaiFull: '', isoDate: '' };
+    
+    const monthNamesThai = [
+        "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+        "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ];
+
+    let day, monthIdx, yearCE;
+
+    // กรณีเป็นภาษาไทยรูปแบบเต็มอยู่แล้ว เช่น "1 กันยายน 2569"
+    const thaiMatch = String(dateStr).trim().match(/^(\d{1,2})\s+([^\d\s]+)\s+(\d{4})$/);
+    if (thaiMatch) {
+        day = parseInt(thaiMatch[1], 10);
+        const monthName = thaiMatch[2];
+        yearCE = parseInt(thaiMatch[3], 10) - 543;
+        monthIdx = monthNamesThai.indexOf(monthName);
+        if (monthIdx !== -1) {
+            const formattedMonth = String(monthIdx + 1).padStart(2, '0');
+            const formattedDay = String(day).padStart(2, '0');
+            return {
+                thaiFull: `${day} ${monthNamesThai[monthIdx]} ${yearCE + 543}`,
+                isoDate: `${yearCE}-${formattedMonth}-${formattedDay}`
+            };
+        }
+    }
+
+    // กรณีเป็นตัวเลข DD/MM/YYYY เช่น 01/09/2569 หรือ 01/09/2026
+    const dmyMatch = String(dateStr).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (dmyMatch) {
+        day = parseInt(dmyMatch[1], 10);
+        monthIdx = parseInt(dmyMatch[2], 10) - 1;
+        let yr = parseInt(dmyMatch[3], 10);
+        yearCE = yr > 2400 ? yr - 543 : yr;
+        const formattedMonth = String(monthIdx + 1).padStart(2, '0');
+        const formattedDay = String(day).padStart(2, '0');
+        return {
+            thaiFull: `${day} ${monthNamesThai[monthIdx]} ${yearCE + 543}`,
+            isoDate: `${yearCE}-${formattedMonth}-${formattedDay}`
+        };
+    }
+
+    // กรณีเป็น YYYY-MM-DD
+    const ymdMatch = String(dateStr).trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (ymdMatch) {
+        yearCE = parseInt(ymdMatch[1], 10);
+        monthIdx = parseInt(ymdMatch[2], 10) - 1;
+        day = parseInt(ymdMatch[3], 10);
+        const formattedMonth = String(monthIdx + 1).padStart(2, '0');
+        const formattedDay = String(day).padStart(2, '0');
+        return {
+            thaiFull: `${day} ${monthNamesThai[monthIdx]} ${yearCE + 543}`,
+            isoDate: `${yearCE}-${formattedMonth}-${formattedDay}`
+        };
+    }
+
+    return { thaiFull: dateStr, isoDate: '' };
+}
+
+// ฟังก์ชันดึงรายละเอียดสัญญาเดิมจาก Google Sheets
+async function fetchContractDetails(subject) {
+    if (!subject || !CONFIG || !CONFIG.GOOGLE_SCRIPT_URL) return;
+
+    try {
+        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getContractDetails&subject=${encodeURIComponent(subject)}`);
+        const result = await response.json();
+
+        if (result.status === 'success' && result.data) {
+            // 1. วันที่เริ่มสัญญา (แปลงเป็นภาษาไทยเต็ม)
+            if (result.data.contractStart) {
+                const startInfo = parseAndFormatThaiDate(result.data.contractStart);
+                const cStartInput = document.getElementById('contractStart');
+                if (cStartInput) {
+                    cStartInput.value = startInfo.thaiFull;
+                    if (startInfo.isoDate) cStartInput.setAttribute('data-date', startInfo.isoDate);
+                }
+            }
+
+            // 2. วันที่สิ้นสุดสัญญา (แปลงเป็นภาษาไทยเต็ม)
+            if (result.data.contractEnd) {
+                const endInfo = parseAndFormatThaiDate(result.data.contractEnd);
+                const cEndInput = document.getElementById('contractEnd');
+                if (cEndInput) {
+                    cEndInput.value = endInfo.thaiFull;
+                    if (endInfo.isoDate) cEndInput.setAttribute('data-date', endInfo.isoDate);
+                }
+            }
+
+            // 3. ชื่อบริษัทดำเนินการ
+            if (document.getElementsByName('companyName')[0]) {
+                document.getElementsByName('companyName')[0].value = result.data.companyName || '';
+            }
+
+            // 4. มูลค่าสัญญา (เงิน)
+            if (document.getElementsByName('contractValue')[0]) {
+                document.getElementsByName('contractValue')[0].value = result.data.contractValue || '';
+            }
+
+            // 5. เข้าทำงานตามสัญญา (ครั้งทั้งหมด)
+            if (document.getElementById('contractVisits')) {
+                document.getElementById('contractVisits').value = result.data.contractVisits || '';
+            }
+
+            // 6. จำนวนวันตามสัญญา (เติมอัตโนมัติจากชีท หรือคำนวณใหม่)
+            const cDaysInput = document.getElementById('contractDays');
+            if (cDaysInput) {
+                if (result.data.contractDays) {
+                    cDaysInput.value = result.data.contractDays;
+                } else if (typeof calculateDays === 'function') {
+                    calculateDays('contractStart', 'contractEnd', 'contractDays');
+                }
+            }
+
+            // 7. คำนวณ "เข้าดำเนินการครั้งที่" ใหม่
+            if (typeof updateVisitCount === 'function') {
+                updateVisitCount();
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching contract details:', error);
+    }
+}
+
+// ==========================================
+// ฟังก์ชันคำนวณเงินสะสมอัตโนมัติ (Frontend)
+// ==========================================
+function calculateAccumulatedMoney() {
+    const contractValueInput = document.getElementById('contractValue') || document.getElementsByName('contractValue')[0];
+    const contractVisitsInput = document.getElementById('contractVisits');
+    const currentVisitInput = document.getElementById('currentVisit');
+    const accumulatedMoneyInput = document.getElementById('accumulatedMoney') || document.getElementsByName('accumulatedMoney')[0];
+
+    if (!contractValueInput || !contractVisitsInput || !currentVisitInput || !accumulatedMoneyInput) return;
+
+    // ดึงค่าและแปลงเป็นตัวเลข (รองรับตัวเลขที่มีเครื่องหมาย Comma ,)
+    const contractValue = parseFloat(contractValueInput.value.replace(/,/g, '')) || 0;
+    const totalVisits = parseFloat(contractVisitsInput.value) || 0;
+    
+    // ดึงตัวเลขครั้งปัจจุบันจากรูปแบบ "X/Y" (ดึงค่าตัวเลขหน้าเครื่องหมาย /)
+    const currentVisitStr = currentVisitInput.value.split('/')[0];
+    const currentVisitNum = parseFloat(currentVisitStr) || 0;
+
+    if (totalVisits > 0 && currentVisitNum > 0 && contractValue > 0) {
+        // สูตร: (มูลค่าเงินทั้งสัญญา / จำนวนครั้งทั้งหมด) * ครั้งที่เข้าทำรวมรอบนี้
+        const accumulated = (contractValue / totalVisits) * currentVisitNum;
+        accumulatedMoneyInput.value = accumulated.toFixed(2);
+    } else {
+        accumulatedMoneyInput.value = '';
+    }
+}
+
+// ผูก Event ให้คำนวณทันทีเมื่อแก้ไขมูลค่าสัญญา หรือ จำนวนครั้งตามสัญญา
+document.getElementById('contractValue')?.addEventListener('input', calculateAccumulatedMoney);
+document.getElementById('contractVisits')?.addEventListener('input', calculateAccumulatedMoney);
+
+
+
+
+
+
+    

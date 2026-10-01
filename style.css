@@ -131,10 +131,10 @@ body {
 
 .form-section h3 {
     margin-top: 0;
-    color: var(--mahidol-blue);
+    color: var(--mahidol-blue); /* สีน้ำเงินเข้มตาม Theme มหาวิทยาลัย */
     margin-bottom: 15px;
     font-size: 20px;
-    font-weight: 300;
+    font-weight: 600; /* เปลี่ยนจาก 300 เป็น 600 เพื่อให้ตัวหนาและสีน้ำเงินเด่นชัดขึ้น */
 }
 
 .grid-container {
@@ -154,10 +154,10 @@ body {
 }
 
 label {
-    font-weight: 300;
+    font-weight: 400; /* ปรับให้ข้อความหนาขึ้นเล็กน้อยเพื่อความชัดเจน */
     margin-bottom: 6px;
     font-size: 16px;
-    color: #444;
+    color: #000000; /* เปลี่ยนจาก #444 เป็นสีดำสนิท */
 }
 
 input, select, textarea {
@@ -220,12 +220,13 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 2px 6px rgba(0,0,0,0.03);
 }
 
+/* ข้อมูลผู้กรอกแบบฟอร์ม (Section 1) */
 .user-profile-card h3 {
-    color: #003366;
+    color: var(--mahidol-blue);
     font-size: 20px;
     margin-top: 0;
-    margin-bottom: 12px;
-    font-weight: 300;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
 .profile-row {
@@ -587,4 +588,122 @@ input:focus, select:focus, textarea:focus {
   border: 2px solid #90EE90 !important; /* สีเขียวอ่อน */
   background-color: #f9fff9 !important; /* เติมสีพื้นหลังเขียวอ่อนๆ ให้สังเกตง่าย (ใส่หรือไม่ใส่ก็ได้) */
   transition: border-color 0.3s ease; /* ให้เปลี่ยนสีแบบนุ่มนวล */
+}
+
+.sec1-title {
+    color: var(--mahidol-blue);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* โครงสร้างแถวข้อมูล */
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* กำหนดระยะห่างระหว่าง Label กับ Value เพียง 8px */
+  margin-bottom: 12px;
+}
+
+/* คอลัมน์หัวข้อฝั่งซ้าย */
+.info-label {
+  /* ปรับความกว้างให้พอดีกับข้อความที่ยาวที่สุด (เช่น วันที่กรอกข้อมูล :) */
+  min-width: 120px; 
+  color: #333;
+}
+
+/* คอลัมน์ค่าข้อมูลฝั่งขวา */
+.info-value {
+  color: #555;
+}
+/* ==========================================
+   ปรับแต่งสีตัวหนังสือและปุ่มปิดใน Popup / Modal
+   ========================================== */
+
+/* 1. ส่วนหัว (Header) และ ปุ่มปิด (กากบาท X) เป็นสีขาวทั้งหมด */
+.modal-header,
+.popup-header,
+.modal-title,
+.popup-title,
+.modal-header *,
+.popup-header *,
+.close,
+.close-btn,
+.btn-close {
+  color: #ffffff !important;
+  opacity: 1 !important; /* ป้องกันไม่ให้ปุ่มจาง */
+}
+
+/* 2. เนื้อหา/รายการตัวเลือกทั่วไป (ที่ยังไม่ได้เลือก) เป็นสีดำ */
+.modal-body,
+.popup-body,
+.modal-body *:not(.selected):not(.active):not([class*="selected"]):not([class*="active"]),
+.popup-body *:not(.selected):not(.active):not([class*="selected"]):not([class*="active"]) {
+  color: #000000;
+}
+
+/* 3. รายการตัวเลือกที่ "ถูกเลือกอยู่" (กลายเป็นแถบสีเข้ม) บังคับตัวหนังสือเป็นสีขาว */
+.modal-body .selected,
+.modal-body .active,
+.modal-body [class*="selected"],
+.modal-body [class*="active"],
+.popup-body .selected,
+.popup-body .active,
+.popup-body [class*="selected"],
+.popup-body [class*="active"],
+.modal-body .selected *,
+.modal-body .active *,
+.modal-body [class*="selected"] *,
+.modal-body [class*="active"] *,
+.popup-body .selected *,
+.popup-body .active *,
+.popup-body [class*="selected"] *,
+.popup-body [class*="active"] * {
+  color: #ffffff !important;
+}
+
+/* 4. ปุ่มกดด้านล่าง (เช่น ปุ่มบันทึก/ตกลง/ยกเลิก) ตัวหนังสือเป็นสีขาว */
+.modal-footer button,
+.popup-footer button,
+.modal-footer .btn,
+.popup-footer .btn {
+  color: #ffffff !important;
+}
+/* ==========================================
+   ปรับสีตัวหนังสือในทุกช่องกรอกข้อมูล (Form Fields) 
+   ให้เป็นสีดำเข้มชัดเจน ทั้งช่องปกติ, Readonly และ Disabled
+   ========================================== */
+
+/* 1. บังคับช่องกรอกข้อมูลและช่องเลือกทั้งหมดให้เป็นสีดำ */
+input,
+select,
+textarea,
+.form-control,
+.form-select,
+.input-box {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important; /* แก้ปัญหาเบราว์เซอร์ล็อกสีช่องให้เป็นสีเทา */
+  opacity: 1 !important; /* ปรับความโปร่งแสงให้ชัดเจน 100% */
+}
+
+/* 2. เจาะจงช่องที่เป็น Readonly และ Disabled ให้ตัวหนังสือดำสนิท */
+input:disabled,
+select:disabled,
+textarea:disabled,
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  opacity: 1 !important;
+}
+/* ==========================================
+   ปรับสีตัวหนังสือของปุ่มกดใน Popup (เช่น ปุ่มยืนยัน) ให้เป็นสีขาว
+   ========================================== */
+.modal button,
+.modal-content button,
+.popup button,
+.popup-content button,
+.modal .btn,
+.popup .btn {
+  color: #ffffff !important;
 }
