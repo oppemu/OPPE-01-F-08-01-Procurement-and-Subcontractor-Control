@@ -263,39 +263,43 @@ async function submitForm() {
     submitBtn.disabled = true;
     submitBtn.innerText = 'กำลังบันทึกข้อมูล...';
 
-    try {
-        const response = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            alert('✅ บันทึกข้อมูลเรียบร้อยแล้ว! ' + (result.message.includes('ID:') ? 'รหัสของคุณคือ: ' + result.message.split('ID: ')[1] : ''));
-            form.reset();
-            resetEmail();
-            document.getElementById('startEmail').value = '';
-            
-            const resetNow = new Date();
-            const resetThaiDate = `${resetNow.getDate()} ${monthNamesThai[resetNow.getMonth()]} ${resetNow.getFullYear() + 543}`;
-            if (document.getElementById('entryDate')) {
-                document.getElementById('entryDate').value = resetThaiDate;
-            }
-            if (document.getElementById('displayThaiDateInput')) {
-                document.getElementById('displayThaiDateInput').value = resetThaiDate;
-            }
-        } else {
-            alert('❌ เกิดข้อผิดพลาด: ' + result.message);
+    // เด้ง SweetAlert2 ทันทีโดยไม่ต้องรอผลจาก Sheet
+    Swal.fire({
+        icon: 'success',
+        title: 'ส่งข้อมูลเรียบร้อย!',
+        text: 'ระบบรับทราบและกำลังนำข้อมูลเข้าชีทในเบื้องหลัง',
+        confirmButtonText: 'ตกลง',
+        confirmButtonColor: '#28a745'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // ล้างแคชฟอร์มและรีเฟรชหน้า
+            const cachedInputs = document.querySelectorAll('.save-cache');
+            cachedInputs.forEach(input => {
+                const key = "form_global_cache_" + (input.id || input.name);
+                localStorage.removeItem(key);
+            });
+            window.location.reload();
         }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('❌ ไม่สามารถเชื่อมต่อกับระบบได้');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = 'บันทึกข้อมูล';
-    }
+    });
+
+    // ส่งข้อมูลไปหลังบ้านเงียบๆ (Background Process)
+    fetch(CONFIG.GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+    }).then(response => response.json())
+      .then(result => {
+          if (result.status === 'success') {
+              console.log('บันทึกลงชีทสำเร็จ:', result.message);
+          } else {
+              console.error('พบปัญหาฝั่งชีท:', result.message);
+          }
+      })
+      .catch(error => console.error('Error:', error))
+      .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'บันทึกข้อมูล';
+      });
 }
 
 async function updateVisitCount() {
@@ -779,7 +783,9 @@ const hseData = {
         "กาวอุตสาหกรรม / ซิลิโคน": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
         "สารกำจัดวัชพืช": "สารกัดกร่อน / อันตรายต่อสุขภาพ",
         "สารกำจัดแมลง / น้ำยาฉีดพ่นยุง": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
-        "ปุ๋ยเคมี": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ"
+        "ปุ๋ยเคมี": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
+        "ถังดับเพลิง": "ก๊าซภายใต้ความดัน",
+        "ไม่เกี่ยวข้องกับสารเคมี": "-"
     };
     
 
@@ -1398,6 +1404,8 @@ const hazardMapping = {
   "สารกำจัดวัชพืช": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
   "สารกำจัดแมลง / น้ำยาฉีดพ่นยุง": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
   "ปุ๋ยเคมี": "อันตรายต่อสิ่งแวดล้อมทางน้ำ / อันตรายต่อสุขภาพ",
+  "ถังดับเพลิง": "ก๊าซภายใต้ความดัน",
+  "ไม่เกี่ยวข้องกับสารเคมี": "-",
   "อื่นๆ (โปรดระบุ)": ""
 };
 
@@ -1627,10 +1635,3 @@ function calculateAccumulatedMoney() {
 // ผูก Event ให้คำนวณทันทีเมื่อแก้ไขมูลค่าสัญญา หรือ จำนวนครั้งตามสัญญา
 document.getElementById('contractValue')?.addEventListener('input', calculateAccumulatedMoney);
 document.getElementById('contractVisits')?.addEventListener('input', calculateAccumulatedMoney);
-
-
-
-
-
-
-    

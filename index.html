@@ -116,8 +116,8 @@
                         <div class="form-group"><label>วันที่เข้าดำเนินการ</label><input type="text" id="workStart" name="workStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
                         <div class="form-group"><label>วันที่ดำเนินการแล้วเสร็จ</label><input type="text" id="workEnd" name="workEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
                         <div class="form-group"><label>จำนวนวันที่ใช้ดำเนินการ</label><input type="number" id="workDays" name="workDays" readonly class="readonly-input"></div>
-                        <div class="form-group"><label>คนปฏิบัติงานตามสัญญา</label><input type="number" name="expectedWorkers"></div>
-                        <div class="form-group"><label>คนที่มาปฏิบัติงานจริง</label><input type="number" name="actualWorkers"></div>
+                        <div class="form-group"><label>จำนวนคนปฏิบัติงานตามสัญญา</label><input type="text" class="form-control" name="contract_workers" id="contract_workers"></div>
+                        <div class="form-group"><label>จำนวนคนที่มาปฏิบัติงานจริง</label><input type="text" class="form-control" name="actual_workers" id="actual_workers"></div>
                     </div>
                 </div>
 
@@ -126,57 +126,57 @@
                     <div class="grid-container">
                         <div class="form-group">
                             <label>ประเภทการตรวจสุขภาพ</label>
-                            <input type="text" id="healthCheckTypeInput" name="healthCheckType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="healthCheckTypeInput" name="healthCheckType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>ผลการประเมินความพร้อมสุขภาพ</label>
-                            <input type="text" id="healthCheckResultInput" name="healthCheckResult" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="healthCheckResultInput" name="healthCheckResult" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>สถานะการอบรม COSHEM</label>
-                            <input type="text" id="coshemInput" name="coshem" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="coshemInput" name="coshem" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>ผลตรวจสอบประวัติอาชญากรรม</label>
-                            <input type="text" id="criminalCheckInput" name="criminalCheck" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="criminalCheckInput" name="criminalCheck" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>ผลตรวจสอบสารเสพติด</label>
-                            <input type="text" id="drugTestInput" name="drugTest" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="drugTestInput" name="drugTest" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>ใบอนุญาตทำงาน (Work Permit)</label>
-                            <input type="text" id="workPermitInput" name="workPermit" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="workPermitInput" name="workPermit" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>สถานะใบอนุญาตทำงาน (Permit Status)</label>
-                            <input type="text" id="permitStatusInput" name="permitStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="permitStatusInput" name="permitStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>อุปกรณ์ป้องกัน (PPE) เลือกได้หลายรายการ</label>
-                            <input type="text" id="ppeInput" name="ppe" placeholder="คลิกเพื่อเลือกรายการ PPE" readonly class="popup-input">
+                            <input type="text" id="ppeInput" name="ppe" placeholder="คลิกเพื่อเลือกรายการ PPE" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>สถานะการอนุมัติใช้งานสารเคมีและSDS</label>
-                            <input type="text" id="sdsStatusInput" name="sdsStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="sdsStatusInput" name="sdsStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>ระบุชื่อสารเคมีที่ใช้</label>
-                            <input type="text" id="sdsNameInput" name="sdsName" placeholder="คลิกเพื่อเลือกสารเคมี" readonly class="popup-input">
+                            <input type="text" id="sdsNameInput" name="sdsName" placeholder="คลิกเพื่อเลือกสารเคมี" readonly class="popup-input save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>ประเภทความเป็นอันตรายที่มักจะพบ</label>
-                            <input type="text" id="hazardTypeInput" name="hazardType" placeholder="คลิกเพื่อเลือก หรือดึงจากสารเคมี" readonly class="popup-input">
+                            <input type="text" id="hazardTypeInput" name="hazardType" placeholder="คลิกเพื่อเลือก หรือดึงจากสารเคมี" readonly class="popup-input save-cache">
                         </div>
 
                     </div>
@@ -188,27 +188,27 @@
     <div class="grid-container">
         <div class="form-group">
             <label>ประเภทของการเปลี่ยนแปลง</label>
-            <input type="text" id="changeTypeInput" name="changeType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+            <input type="text" id="changeTypeInput" name="changeType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
         </div>
 
         <div class="form-group">
             <label>ระดับของผลกระทบ</label>
-            <input type="text" id="impactLevelInput" name="impactLevel" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+            <input type="text" id="impactLevelInput" name="impactLevel" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
         </div>
 
         <div class="form-group">
             <label>ลักษณะของผลกระทบ</label>
-            <input type="text" id="impactCharacterInput" name="impactCharacter" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+            <input type="text" id="impactCharacterInput" name="impactCharacter" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
         </div>
 
         <div class="form-group">
             <label>สถานการณ์ทบทวนการประเมิน</label>
-            <input type="text" id="reviewStatusInput" name="reviewStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+            <input type="text" id="reviewStatusInput" name="reviewStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
         </div>
 
         <div class="form-group">
             <label>ผลลัพธ์และการจัดการ</label>
-            <input type="text" id="mitigationResultInput" name="mitigationResult" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+            <input type="text" id="mitigationResultInput" name="mitigationResult" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
         </div>
     </div>
 </div>
@@ -219,27 +219,27 @@
                     <div class="grid-container">
                         <div class="form-group">
                             <label>สถานะงาน (Job Status)</label>
-                            <input type="text" id="jobStatusInput" name="jobStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="jobStatusInput" name="jobStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
                         
                         <div class="form-group">
                             <label>รายละเอียดหากมีการซ่อมแซม/ส่งพัสดุ</label>
-                            <input type="text" id="jobDetailInput" name="jobDetail" placeholder="คลิกเพื่อเลือก หรือระบุรายละเอียด" readonly class="popup-input">
+                            <input type="text" id="jobDetailInput" name="jobDetail" placeholder="คลิกเพื่อเลือก หรือระบุรายละเอียด" readonly class="popup-input save-cache">
                         </div>
                         
                         <div class="form-group">
                             <label>รายละเอียดงานที่ดำเนินการครั้งนี้</label>
-                            <input type="text" name="jobDetails" placeholder="กรอกรายละเอียดงาน">
+                            <input type="text" name="jobDetails" id="jobDetails" placeholder="กรอกรายละเอียดงาน" class="save-cache">
                         </div>
 
                         <div class="form-group">
                             <label>ความจำเป็นในการนำเข้าที่ประชุมฯ</label>
-                            <input type="text" id="meetingRequirementInput" name="meetingRequirement" placeholder="คลิกเพื่อเลือก" readonly class="popup-input">
+                            <input type="text" id="meetingRequirementInput" name="meetingRequirement" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
                         
                         <div class="form-group">
                             <label>หมายเหตุ</label>
-                            <input type="text" name="remark" placeholder="กรอกหมายเหตุ (ถ้ามี)">
+                            <input type="text" name="remark" id="remark" placeholder="กรอกหมายเหตุ (ถ้ามี)" class="save-cache">
                         </div>
                     </div>
                 </div>
@@ -306,6 +306,7 @@
                     <li><label><input type="checkbox" value="ถุงมือกันสารเคมี"> ถุงมือกันสารเคมี</label></li>
                     <li><label><input type="checkbox" value="ถุงมือกันบาด"> ถุงมือกันบาด</label></li>
                     <li><label><input type="checkbox" value="ถุงมือผ้า"> ถุงมือผ้า</label></li>
+                    <li><label><input type="checkbox" value="ถุงมือยาง"> ถุงมือยาง</label></li>
                     <li><label><input type="checkbox" value="รองเท้านิรภัย"> รองเท้านิรภัย</label></li>
                     <li><label><input type="checkbox" value="แว่นตานิรภัย / Face Shield"> แว่นตานิรภัย / Face Shield</label></li>
                     <li><label><input type="checkbox" value="เสื้อสะท้อนแสง (High Visibility Vest)"> เสื้อสะท้อนแสง (High Visibility Vest)</label></li>
@@ -346,6 +347,8 @@
                     <li><label><input type="checkbox" value="สารกำจัดวัชพืช"> สารกำจัดวัชพืช</label></li>
                     <li><label><input type="checkbox" value="สารกำจัดแมลง / น้ำยาฉีดพ่นยุง"> สารกำจัดแมลง / น้ำยาฉีดพ่นยุง</label></li>
                     <li><label><input type="checkbox" value="ปุ๋ยเคมี"> ปุ๋ยเคมี</label></li>
+                    <li><label><input type="checkbox" value="ถังดับเพลิง"> ถังดับเพลิง</label></li>
+                    <li><label><input type="checkbox" value="ไม่เกี่ยวข้องกับสารเคมี"> ไม่เกี่ยวข้องกับสารเคมี</label></li>
                     <li><label style="color:#dc3545; font-weight:bold;"><input type="checkbox" value="custom"> อื่นๆ (โปรดระบุ)</label></li>
                 </ul>
                 <button type="button" class="primary-btn" id="btn_confirm_sds" style="margin-top: 15px;">ยืนยันการเลือก</button>
@@ -537,9 +540,75 @@
     </div>
 
     
+    <!-- POPUP ยืนยันการส่งข้อมูลสำเร็จ (เด้งกลางจอ) -->
+    <div id="successSubmitModal" class="modal-overlay" style="display: none; z-index: 9999;">
+        <div class="modal-content" style="text-align: center; padding: 40px 20px; max-width: 400px;">
+            <div style="font-size: 70px; color: #28a745; margin-bottom: 10px; line-height: 1;">&#10004;</div>
+            <h2 style="color: #333; margin-bottom: 10px; font-size: 24px;">ส่งข้อมูลเรียบร้อย!</h2>
+            <p style="color: #666; margin-bottom: 25px;">ระบบรับทราบและกำลังส่งข้อมูลเข้าชีทในเบื้องหลัง</p>
+            <button type="button" class="primary-btn" onclick="closeAndResetForm()" style="width: 100%;">ตกลง</button>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
     <script src="config.js"></script>
     <script src="script.js"></script>
+    
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // เลือกช่องที่ต้องการบันทึกแคชทั้งหมด (ส่วนที่ 3, 4, 5 ที่ใส่ class save-cache ไว้)
+    const cachedInputs = document.querySelectorAll('.save-cache');
+
+    // 1. ตอนโหลดหน้าเว็บ ให้ดึงข้อมูลจาก Local Storage มาใส่ในช่องทันที
+    cachedInputs.forEach(input => {
+        const key = "form_global_cache_" + (input.id || input.name);
+        const savedValue = localStorage.getItem(key);
+        
+        if (savedValue !== null && savedValue !== "") {
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = (savedValue === 'true');
+            } else {
+                input.value = savedValue;
+            }
+        }
+    });
+
+    // 2. ตรวจจับและบันทึกค่าลง Local Storage ตลอดเวลา (ทุกๆ 0.5 วินาที)
+    // การใช้ setInterval จะแก้ปัญหาที่เลือกจาก Popup (Modal) แล้ว Event แบบปกติ (onChange) ไม่ทำงาน
+    setInterval(() => {
+        cachedInputs.forEach(input => {
+            const key = "form_global_cache_" + (input.id || input.name);
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                localStorage.setItem(key, input.checked);
+            } else {
+                localStorage.setItem(key, input.value);
+            }
+        });
+    }, 500);
+});
+    
+    // ฟังก์ชันเปิด Popup ส่งสำเร็จ (เรียกใช้จาก script.js ได้เลย)
+    window.showSuccessModal = function() {
+        document.getElementById('successSubmitModal').style.display = 'flex';
+    };
+
+    // ปิด Popup แล้วล้างแคชฟอร์ม
+    window.closeAndResetForm = function() {
+        document.getElementById('successSubmitModal').style.display = 'none';
+        
+        // ล้างข้อมูลที่แคชไว้ทั้งหมด เพื่อให้พร้อมกรอกงานใหม่
+        const cachedInputs = document.querySelectorAll('.save-cache');
+        cachedInputs.forEach(input => {
+            const key = "form_global_cache_" + (input.id || input.name);
+            localStorage.removeItem(key);
+        });
+        
+        // รีเฟรชหน้าต่าง
+        window.location.reload();
+    };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
