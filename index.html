@@ -83,13 +83,31 @@
                 <div class="form-section">
                     <h3>2. รายละเอียดงานและสัญญา</h3>
                     <div class="grid-container">
+
+                        <!-- 1. ปรับช่อง Input ของเดิม -->
+<div class="form-group">
+    <label>ปีงบประมาณของสัญญา</label>
+    <input type="text" id="fiscalYear" name="budgetYear" value="" readonly onclick="openYearModal()" placeholder="กรุณาเลือกปีงบประมาณก่อน" style="cursor: pointer;">
+</div>
+
+<div id="yearModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>เลือกปีงบประมาณ</h3>
+            <span class="modal-close" onclick="closeYearModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <!-- คอนเทนเนอร์สำหรับแสดงตัวเลือกปี -->
+            <ul id="yearListContainer" class="category-list"></ul>
+        </div>
+    </div>
+</div>
+                        
                         <div class="form-group">
                             <label>สถานที่ดำเนินการ</label>
                             <input type="text" id="locationInput" name="location" placeholder="คลิกเพื่อเลือกสถานที่" readonly style="cursor: pointer; background-color: #fff;">
                         </div>
 
-                        
-                        <!-- ปรับช่องหมวดหมู่งานให้เปิด Popup -->
                         <div class="form-group">
                             <label>หมวดหมู่งาน</label>
                             <input type="text" id="categoryInput" name="category" placeholder="คลิกเพื่อเลือกหมวดหมู่งาน" readonly style="cursor: pointer; background-color: #fff;">
@@ -105,19 +123,110 @@
                             <input type="text" id="subject" name="subject" placeholder="คลิกเพื่อเลือกเรื่องที่ดำเนินการ" readonly style="cursor: pointer; background-color: #fff;">
                         </div>
 
-                        <div class="form-group"><label>ชื่อบริษัทดำเนินการ</label><input type="text" name="companyName"></div>
-                        <div class="form-group"><label>วันที่เริ่มสัญญา</label><input type="text" id="contractStart" name="contractStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>วันที่สิ้นสุดสัญญา</label><input type="text" id="contractEnd" name="contractEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>จำนวนวันตามสัญญา</label><input type="number" id="contractDays" name="contractDays" readonly class="readonly-input"></div>
-                        <div class="form-group"><label>มูลค่าสัญญา (เงิน)</label><input type="number" name="contractValue" placeholder="บาท"></div>
-                        <div class="form-group"><label>เข้าทำงานตามสัญญา (ครั้งทั้งหมด)</label><input type="number" id="contractVisits" name="contractVisits" placeholder="เช่น 12"></div>
-                        <div class="form-group"><label>เข้าดำเนินการครั้งที่</label><input type="text" id="currentVisit" name="currentVisit" placeholder="คำนวณอัตโนมัติ (เช่น 1/12)" readonly class="readonly-input"></div>
-                        <div class="form-group"><label>คิดเป็นเงินสะสม</label><input type="number" name="accumulatedMoney" placeholder="บาท"></div>
-                        <div class="form-group"><label>วันที่เข้าดำเนินการ</label><input type="text" id="workStart" name="workStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>วันที่ดำเนินการแล้วเสร็จ</label><input type="text" id="workEnd" name="workEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;"></div>
-                        <div class="form-group"><label>จำนวนวันที่ใช้ดำเนินการ</label><input type="number" id="workDays" name="workDays" readonly class="readonly-input"></div>
-                        <div class="form-group"><label>จำนวนคนปฏิบัติงานตามสัญญา</label><input type="text" class="form-control" name="contract_workers" id="contract_workers"></div>
-                        <div class="form-group"><label>จำนวนคนที่มาปฏิบัติงานจริง</label><input type="text" class="form-control" name="actual_workers" id="actual_workers"></div>
+                        <div class="form-group">
+                            <label>เลขที่สัญญา</label>
+                            <input type="text" id="contractNumber" name="contractNumber" placeholder="ระบุเลขที่สัญญา" class="save-cache">
+                        </div>
+
+                        <!-- 1. วันที่ลงนามในสัญญา -->
+<div class="form-group">
+    <label for="contractSigningDate">วันที่ลงนามในสัญญา</label>
+    <!-- หากใช้ Date Picker เดิมของระบบ ให้ใส่ Class ตามที่ระบบกำหนดไว้ -->
+    <input type="text" id="contractSigningDate" name="contractSigningDate" class="form-control" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;">
+    <small id="contractSigningDateStatus" aria-live="polite"></small>
+</div>
+
+                        <!-- แก้ไขคำใน Label ทั้ง 3 ช่องแล้ว -->
+                        <div class="form-group">
+                            <label>ชื่อประธานตรวจรับ</label>
+                            <input type="text" id="committeeChair" name="committeeChairDisplay" placeholder="ระบุชื่อ-นามสกุล" class="save-cache">
+                            <input type="hidden" id="committeeChairName" name="committeeChair">
+                            <input type="hidden" id="committeeChairPosition" name="committeeChairPosition">
+                            <small id="committeeChairStatus" aria-live="polite"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>ชื่อหัวหน้าผู้ควบคุมงาน</label>
+                            <input type="text" id="chiefSupervisor" name="chiefSupervisorDisplay" placeholder="ระบุชื่อ-นามสกุล" class="save-cache">
+                            <input type="hidden" id="chiefSupervisorName" name="chiefSupervisor">
+                            <input type="hidden" id="chiefSupervisorPosition" name="chiefSupervisorPosition">
+                            <small id="chiefSupervisorStatus" aria-live="polite"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>ชื่อผู้ควบคุมงาน</label>
+                            <input type="text" id="supervisorPopupTrigger" placeholder="คลิกเพื่อจัดการผู้ควบคุมงาน" readonly style="cursor: pointer; background-color: #fff;">
+                            <!-- Hidden input ไว้เก็บข้อมูลรายชื่อเป็น JSON -->
+                            <input type="hidden" id="supervisorsData" name="supervisorsData">
+                            <input type="hidden" id="supervisorsPeople" name="supervisorsPeople">
+                        </div>
+
+                        <!-- ข้อมูลส่วนที่เหลือของสัญญา -->
+                        <div class="form-group">
+                            <label>ชื่อบริษัทดำเนินการ</label>
+                            <input type="text" name="companyName">
+                        </div>
+
+                        <div class="form-group">
+                            <label>วันที่เริ่มสัญญา</label>
+                            <input type="text" id="contractStart" name="contractStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;">
+                        </div>
+
+                        <div class="form-group">
+                            <label>วันที่สิ้นสุดสัญญา</label>
+                            <input type="text" id="contractEnd" name="contractEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;">
+                        </div>
+
+                        <div class="form-group">
+                            <label>จำนวนวันตามสัญญา</label>
+                            <input type="number" id="contractDays" name="contractDays" readonly class="readonly-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>มูลค่าสัญญา (เงิน)</label>
+                            <input type="text" id="contractValue" name="contractValue" inputmode="decimal" placeholder="เช่น 1,000,000.00 บาท">
+                        </div>
+
+                        <div class="form-group">
+                            <label>เข้าทำงานตามสัญญา (ครั้งทั้งหมด)</label>
+                            <input type="number" id="contractVisits" name="contractVisits" placeholder="เช่น 12">
+                        </div>
+
+                        <div class="form-group">
+                            <label>เข้าดำเนินการครั้งที่</label>
+                            <input type="text" id="currentVisit" name="currentVisit" placeholder="คำนวณอัตโนมัติ (เช่น 1/12)" readonly class="readonly-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>คิดเป็นเงินสะสม</label>
+                            <input type="text" id="accumulatedMoney" name="accumulatedMoney" inputmode="decimal" placeholder="บาท">
+                        </div>
+
+                        <div class="form-group">
+                            <label>วันที่เข้าดำเนินการ</label>
+                            <input type="text" id="workStart" name="workStart" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;">
+                        </div>
+
+                        <div class="form-group">
+                            <label>วันที่ดำเนินการแล้วเสร็จ</label>
+                            <input type="text" id="workEnd" name="workEnd" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;">
+                        </div>
+
+                        <div class="form-group">
+                            <label>จำนวนวันที่ใช้ดำเนินการ</label>
+                            <input type="number" id="workDays" name="workDays" readonly class="readonly-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>จำนวนคนปฏิบัติงานตามสัญญา</label>
+                            <input type="text" class="form-control" name="expectedWorkers" id="contract_workers">
+                        </div>
+
+                        <div class="form-group">
+                            <label>จำนวนคนที่มาปฏิบัติงานจริง</label>
+                            <input type="text" class="form-control" name="actualWorkers" id="actual_workers">
+                        </div>
+
                     </div>
                 </div>
 
@@ -188,7 +297,7 @@
     <div class="grid-container">
         <div class="form-group">
             <label>ประเภทของการเปลี่ยนแปลง</label>
-            <input type="text" id="changeTypeInput" name="changeType" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
+            <input type="text" id="changeTypeInput" name="changeTypeDetail" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
         </div>
 
         <div class="form-group">
@@ -221,6 +330,24 @@
                             <label>สถานะงาน (Job Status)</label>
                             <input type="text" id="jobStatusInput" name="jobStatus" placeholder="คลิกเพื่อเลือก" readonly class="popup-input save-cache">
                         </div>
+
+                        <!-- 2. เลขที่หนังสือส่งงานของบริษัท -->
+<div class="form-group">
+    <label for="submissionLetterNo">เลขที่หนังสือส่งงานของบริษัท</label>
+    <input type="text" id="submissionLetterNo" name="submissionLetterNo" class="form-control" placeholder="ระบุเลขที่หนังสือ...">
+</div>
+
+<!-- 3. วันที่บริษัทส่งงาน -->
+<div class="form-group">
+    <label for="submissionDate">วันที่บริษัทส่งงาน</label>
+    <input type="text" id="submissionDate" name="submissionDate" class="form-control" placeholder="คลิกเพื่อเลือกวันที่" readonly style="cursor: pointer; background-color: #fff;">
+</div>
+
+<!-- 4. บริษัทส่งงานงวดที่ -->
+<div class="form-group">
+    <label for="submissionInstallment">บริษัทส่งงานงวดที่</label>
+    <input type="number" id="submissionInstallment" name="submissionInstallment" class="form-control" min="1" step="1" value="1" placeholder="ระบุเลขงวดงาน (เช่น 1, 2, 3...)">
+</div>
                         
                         <div class="form-group">
                             <label>รายละเอียดหากมีการซ่อมแซม/ส่งพัสดุ</label>
@@ -609,6 +736,27 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.reload();
     };
     </script>
+
+    <!-- POPUP (Modal) สำหรับเลือก/กรอกชื่อผู้ควบคุมงาน -->
+<div id="supervisorsModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3>รายชื่อผู้ควบคุมงาน</h3>
+            <span class="modal-close" id="closeSupervisorsModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="supervisorsInputsList" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- JavaScript จะสร้างช่อง Input 8 ช่องที่นี่ -->
+            </div>
+            <div style="margin-top: 20px;">
+                <button type="button" class="primary-btn" id="btnConfirmSupervisors" style="width: 100%;">บันทึก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    
 </body>
 </html>

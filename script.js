@@ -1,3 +1,812 @@
+// User-supplied personnel snapshot: 169 name/position pairs, 2026-11-09.
+const EMBEDDED_PERSONNEL = [
+  {
+    "name": "อิทธิโชติ จักรไพวงศ์",
+    "position": "รองอธิการบดีฝ่ายกายภาพและสิ่งแวดล้อม"
+  },
+  {
+    "name": "พุฒิเศรษฐ์ ตันติเมฆิน",
+    "position": "วิศวกรโยธา ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สุพจน์ ภาษีรอด",
+    "position": "นักวิเคราะห์นโยบายและแผน ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "เนตรา แย้มเดช",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการ"
+  },
+  {
+    "name": "อรวรรณ ไพรี",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ปิยนุช ถาวร",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ฤทัยรัตน์ พิเชฐบวรกุล",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "อิสสรียา จิตวรานนท์",
+    "position": "นักนิเทศศิลป์"
+  },
+  {
+    "name": "รรินทิพย์ จักรพันธุ์ ณ อยุธยา",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "พรหมสิทธิ์ แคฝอย",
+    "position": "พนักงานขับรถยนต์"
+  },
+  {
+    "name": "นงนุช คนมั่น",
+    "position": "พนักงานบริการเอกสารทั่วไป"
+  },
+  {
+    "name": "พิรดาณัฐ พยุง",
+    "position": "พนักงานธุรการ"
+  },
+  {
+    "name": "วรวัฒน์ ภมรพล",
+    "position": "พนักงานธุรการ"
+  },
+  {
+    "name": "พิรญาณ์ ณ น่าน",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "วรัญญา การะเวก",
+    "position": "นักวิชาการการเงินและบัญชี"
+  },
+  {
+    "name": "วริษฐา จันทร์เจือศิริ",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "ธิระพงศ์ เหมทานนท์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "นิภาพร พูลเพิ่ม",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ลินทศักดิ์ จักรพันธุ์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "อมรรัตน์ โคตรวงค์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ศรีวิตรา ปิ่นตบแต่ง",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "วิษณุ สว่างใจธรรม",
+    "position": "พนักงานขับรถยนต์"
+  },
+  {
+    "name": "พร้อมพงศ์ ผุงเพิ่มตระกูล",
+    "position": "วิศวกรโยธา ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ปราศรัย เพ็งปรีชา",
+    "position": "วิศวกรโยธา"
+  },
+  {
+    "name": "สมชาย มิตรเทวิน",
+    "position": "สถาปนิก ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ครรชิต ยอดแก้ว",
+    "position": "วิศวกรโยธา ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ศุภวรรณ อารีจิตรานุสรณ์",
+    "position": "สถาปนิก ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สาธร เบญจชาด",
+    "position": "วิศวกรโยธา ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สุภาดา ศรีสารคาม",
+    "position": "สถาปนิก ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ณัฐ ตรีลักษณวิลัย",
+    "position": "วิศวกรโยธา"
+  },
+  {
+    "name": "มนตรี แสงทวี",
+    "position": "วิศวกรโยธา ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ศุภชัย เด่นไตรรัตน์",
+    "position": "วิศวกรโยธา"
+  },
+  {
+    "name": "ยุทธวัชร อภิวาทนสิริ",
+    "position": "สถาปนิก"
+  },
+  {
+    "name": "อัจฉรา กิตติอภินันท์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "อัครนันท์ เซี่ยงเห็น",
+    "position": "วิศวกรไฟฟ้า ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "วราลักษณ์ นามเสถียร",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สุรินทร์ วงษ์ตา",
+    "position": "วิศวกรไฟฟ้า ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ฐิตารีย์ วรรณาภรณ์สกุล",
+    "position": "วิศวกร"
+  },
+  {
+    "name": "พิสิษฐ์ พยุง",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "พนอ เปียทอง",
+    "position": "ช่างก่อสร้าง"
+  },
+  {
+    "name": "วีระศักดิ์ บัวพันธ์",
+    "position": "เจ้าหน้าที่บริหารงานก่อสร้าง"
+  },
+  {
+    "name": "สุพัฒน์ ศรีเอี่ยมจันทร์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สุระเชน มะลิงาม",
+    "position": "วิศวกรเครื่องกล ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สุริยัน จันทร์เงิน",
+    "position": "วิศวกรไฟฟ้า ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สัญชัย สถิตย์สารธรรม",
+    "position": "วิศวกรไฟฟ้า"
+  },
+  {
+    "name": "พิชยนันท์ พิมพ์ชื่น",
+    "position": "วิศวกรไฟฟ้า ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "กมลพรรณ จงคงคาวุฒิ",
+    "position": "วิศวกรเครื่องกล ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ประวิทย์ ไชยชุมภู",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ณัฐวัฒน์ จันทร์แปลง",
+    "position": "วิศวกรไฟฟ้า"
+  },
+  {
+    "name": "ฤทธิพร เพียรจันทร์",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "นราธิป เขียวคำรพ",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "กบินทร์ จงขะวะดี",
+    "position": "วิศวกรไฟฟ้า ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "วรรษชล แก้วมณี",
+    "position": "ช่างไฟฟ้า"
+  },
+  {
+    "name": "เมธาวี ชาบัญ",
+    "position": "วิศวกร"
+  },
+  {
+    "name": "ชัยวัฒน์ วิริยะกุล",
+    "position": "วิศวกรเครื่องกล ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "วรทัต หงส์วาณิชวงศ์",
+    "position": "วิศวกรไฟฟ้า"
+  },
+  {
+    "name": "ทศพร ศรีไกรรส",
+    "position": "วิศวกรไฟฟ้า ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "นวพล ยอดภักดี",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ประพันธ์ ชื่นชมเชาวน์",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ชนะโชติ เกษาภรณ์",
+    "position": "วิศวกร ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "อนพัทย์ จันทร์ปราง",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "วีระชน อยู่สำราญ",
+    "position": "วิศวกรไฟฟ้า"
+  },
+  {
+    "name": "พันธกานต์ แจ่มแจ้ง",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ไตรภูมิ สุจจิตร์จูล",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ชลกานต์ เจริญสุข",
+    "position": "วิศวกร"
+  },
+  {
+    "name": "เทิดศักดิ์ ช้างหล่อ",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "สมยศ ลบล้ำเลิศ",
+    "position": "นักวิชาการโสตทัศนศึกษา"
+  },
+  {
+    "name": "สรวุฒิ เหล่าสิม",
+    "position": "นักวิชาการโสตทัศนศึกษา"
+  },
+  {
+    "name": "ทวี ทัดเทียม",
+    "position": "นักวิชาการโสตทัศนศึกษา"
+  },
+  {
+    "name": "ธนชาติ เศรษฐบุตร",
+    "position": "นักวิชาการโสตทัศนศึกษา ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ภัทรพล ไชยมาตย์",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ยุทธภูมิ ญานเพิ่ม",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการ"
+  },
+  {
+    "name": "พิชญา ดลมินทร์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ศักดิ์นรินทร์ คัญทัพ",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "วิฑูรย์ สุวรรณกิจ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "พีรพงษ์ จินดานิล",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "บัญชา ฟักเฟื่อง",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "พรชัย โพธิ์ไซย์",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "สถาพร แจ่มใจ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "ตะวัน ทรัพย์อบรมย์",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "สุรศักดิ์ ต้วมสี",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "โสภาณา จันทร์ทวีนุช",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "ทรงกลด สุดตา",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "นพกร เมืองแก้ว",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "ไกรสอน คชมิตร",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "ชนสรณ์ เนียมสุภาพ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "อำนาจ แม้นพรม",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "นฤเดช เวชบุญ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "ศุภชัย เรืองเพชร",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "สุรชัย สุวรรณราฐ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "อนิน นาควัชระ",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "ปิยนันท์ ศรีชุมพวง",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "พชร สาธร",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "อนุชา สิทธิขำ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "ชัยเทพ เจียมวีระบรรยง",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "บุญฤทธิ์ สายลือนาม",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "ศักดิ์นรินทร์ แก้วหานาม",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "มนัสชาย ประเดิมชัย",
+    "position": "เจ้าหน้าที่บริหารงานก่อสร้าง"
+  },
+  {
+    "name": "อุทัยวรรณ เกิดบุญ",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "วรพจน์ เฉลิมกลิ่น",
+    "position": "นักวิชาการเกษตร ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สมพงษ์ พิเชฐบวรกุล",
+    "position": "นักวิชาการเกษตร"
+  },
+  {
+    "name": "กรรณิการ์ ศรีราณี",
+    "position": "นักวิชาการเกษตร"
+  },
+  {
+    "name": "สมชาย สุวิมล",
+    "position": "คนสวน"
+  },
+  {
+    "name": "สมพล คงอยู่",
+    "position": "พนักงานพิมพ์"
+  },
+  {
+    "name": "จวน แก่นละออ",
+    "position": "คนสวน"
+  },
+  {
+    "name": "ชาย ศรีสุริยวงษ์",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "พรภพ ยาเณร",
+    "position": "พนักงานขับรถยนต์"
+  },
+  {
+    "name": "อนนท์ ปรางค์แก้ว",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "ธีรพงษ์ การะเกตุ",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "สมหมาย เรืองยศ",
+    "position": "คนสวน"
+  },
+  {
+    "name": "มนตรี นาคไร่ขิง",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "ศราวุธ เนียมหมวด",
+    "position": "พนักงานธุรการ"
+  },
+  {
+    "name": "จีรวัฒน์ หลีล้วน",
+    "position": "พนักงานสถานที่"
+  },
+  {
+    "name": "จักรี โพธิ์ทอง",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "ไตรรงค์ นาคไร่ขิง",
+    "position": "ผู้ช่วยช่างทั่วไป"
+  },
+  {
+    "name": "ธนดล เรืองสุภาพ",
+    "position": "คนสวน"
+  },
+  {
+    "name": "ศิริ โตโสภณ",
+    "position": "พนักงานขับเครื่องจักรกลขนาดเบา"
+  },
+  {
+    "name": "อนันต์ ฤทธิ์คำรพ",
+    "position": "คนสวน"
+  },
+  {
+    "name": "สราวุฒิ โตสัมพันธ์",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "ธนกฤต เพ็งนาเรนทร์",
+    "position": "คนสวน"
+  },
+  {
+    "name": "วิทวัฒน์ กิจคงชีพ",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "อัครเดช ดนุดิษฐ",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "อภิชาติ มอญสะแก",
+    "position": "พนักงานขับรถยนต์"
+  },
+  {
+    "name": "หนึ่ง เที่ยงราตรี",
+    "position": "ผู้ช่วยช่างทั่วไป"
+  },
+  {
+    "name": "ศุภชัย เนียมสุภาพ",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "อนุรักษ์ สีสดใส",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "ศราวุธ พรศรี",
+    "position": "ผู้ช่วยช่างทั่วไป"
+  },
+  {
+    "name": "วีรยุทธ ทัศนดี",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "วันชนะ พลายจันทร์",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "กฤษณ ทองศรีเมือง",
+    "position": "คนสวน"
+  },
+  {
+    "name": "อำนาจ ศรีสัมพันธ์",
+    "position": "คนสวน"
+  },
+  {
+    "name": "จักรยศนันท์ เตียวตระกูล",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "อุทุมพร สุดสวาสดิ์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "วรพจน์ ปัญจมานนท์",
+    "position": "วิศวกรไฟฟ้า"
+  },
+  {
+    "name": "บัณฑิต โอษคลัง",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "กฤตนันท์ วิจิตรกูล",
+    "position": "นักวิชาการโสตทัศนศึกษา"
+  },
+  {
+    "name": "ธีรพงศ์ เกียรติกมลชัย",
+    "position": "นักวิชาการโสตทัศนศึกษา"
+  },
+  {
+    "name": "อภิวัฒน์ เศรษฐจารุรักษ์",
+    "position": "นักวิชาการโสตทัศนศึกษา"
+  },
+  {
+    "name": "จิรศักดิ์ ทับทิมหอม",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "อภิรักษ์ ฟักภู่",
+    "position": "พนักงานสถานที่"
+  },
+  {
+    "name": "อรรถพร ประกอบเพชร",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "วสันต์ รัตนนิธาน",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ศิริพร ศรีเพ็ญแก้ว",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "อคิราภ์ ภูริรักษ์พิติกร",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "ศศิวิมล ผุงเพิ่มตระกูล",
+    "position": "นักวิชาการสิ่งแวดล้อม"
+  },
+  {
+    "name": "มะลุลี เลี่ยมแหลม",
+    "position": "นักวิชาการสิ่งแวดล้อม ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "ศันสณีย์ ศิริลักษณ์",
+    "position": "นักวิชาการสิ่งแวดล้อม"
+  },
+  {
+    "name": "รุ่งทิวา บัวดี",
+    "position": "นักวิชาการสิ่งแวดล้อม"
+  },
+  {
+    "name": "วราทิพย์ วัฒนวินิจฉัย",
+    "position": "นักวิชาการสิ่งแวดล้อม ผู้ชำนาญการพิเศษ"
+  },
+  {
+    "name": "สุฑานาศ สุยพงษ์พันธ์",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "เจริญชัย แสงอุทัย",
+    "position": "วิศวกรเครื่องกล"
+  },
+  {
+    "name": "สุเทพ วงษ์คำ",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "สวัสดิ์ อาจมาก",
+    "position": "คนสวน"
+  },
+  {
+    "name": "สมนึก แจ้งเจียนหัด",
+    "position": "คนสวน"
+  },
+  {
+    "name": "บุญเลิศ ต่ายกระทึก",
+    "position": "คนสวน"
+  },
+  {
+    "name": "เสน่ห์ ทองศรีเมือง",
+    "position": "คนสวน"
+  },
+  {
+    "name": "สุดารัตน์ คำภิมูล",
+    "position": "พนักงานธุรการ"
+  },
+  {
+    "name": "รวี จำเนียร",
+    "position": "เจ้าหน้าที่บริหารงานทั่วไป"
+  },
+  {
+    "name": "วศิน แสวงสุข",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "นิรมล กมลยชาติ",
+    "position": "พนักงานธุุรการ"
+  },
+  {
+    "name": "วัชระ วัดครุฑ",
+    "position": "พนักงานขับรถยนต์"
+  },
+  {
+    "name": "กัญญาณัฐ อุณชาติ",
+    "position": "นักวิชาการสิ่งแวดล้อม"
+  },
+  {
+    "name": "อดิศักดิ์ อุทัย",
+    "position": "วิศวกรเครื่องกล"
+  },
+  {
+    "name": "ปรเมธ เผือกทอง",
+    "position": "ช่างเทคนิค"
+  },
+  {
+    "name": "ป้อม แจ่มจรูญ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "วุฒิชัย แสงเจริญเกียรติ",
+    "position": "พนักงานรักษาความปลอดภัย"
+  },
+  {
+    "name": "นนทนันท์  ศรีจันทร์",
+    "position": "นักวิชาการสิ่งแวดล้อม"
+  },
+  {
+    "name": "ศิริชัย สว่างชม",
+    "position": "พนักงานทั่วไป"
+  },
+  {
+    "name": "วิชญ์พงศ์ วรรธนะโกวินท์",
+    "position": "วิศวกรเครื่องกล"
+  }
+];
+function normalizePersonnelSearch(value) { return String(value || '').trim().replace(/\s+/g, ' ').toLocaleLowerCase('th'); }
+function searchEmbeddedPersonnel(query) {
+    const prefix = normalizePersonnelSearch(query);
+    if (!prefix) return {data: [], hasMore: false};
+    const matches = EMBEDDED_PERSONNEL.filter(person => normalizePersonnelSearch(person.name).startsWith(prefix));
+    return {data: matches.slice(0, 20), hasMore: matches.length > 20};
+}
+function resolveEmbeddedPersonnel(name) {
+    const exact = normalizePersonnelSearch(name);
+    const matches = EMBEDDED_PERSONNEL.filter(person => normalizePersonnelSearch(person.name) === exact);
+    return matches.length === 1 ? {status: 'success', data: matches[0]} : {status: matches.length ? 'ambiguous' : 'not_found'};
+}
+
+// Format only the display; submit the ungrouped decimal string without rounding.
+function normalizeContractMoney(value) {
+    const raw = String(value == null ? '' : value).replace(/,/g, '').trim();
+    if (raw === '') return '';
+    if (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw)) return null;
+    const parts = raw.split('.');
+    const integer = (parts[0] || '0').replace(/^0+(?=\d)/, '');
+    return integer + (parts.length > 1 && parts[1] !== '' ? '.' + parts[1] : '');
+}
+function formatContractMoney(value) {
+    const raw = String(value == null ? '' : value).replace(/,/g, '').trim();
+    if (raw === '') return '';
+    if (raw === '.') return '0.';
+    const normalized = normalizeContractMoney(raw);
+    if (normalized === null) return null;
+    const parts = normalized.split('.');
+    return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+        (parts.length > 1 ? '.' + parts[1] : raw.endsWith('.') ? '.' : '');
+}
+function formatContractMoneyInput(input, recalculate = true) {
+    const original = input.value;
+    const caret = input.selectionStart ?? original.length;
+    const significantBeforeCaret = original.slice(0, caret).replace(/,/g, '').length;
+    const formatted = formatContractMoney(original);
+    if (formatted === null) {
+        input.setCustomValidity('กรุณากรอกมูลค่าสัญญาเป็นตัวเลขเท่านั้น');
+        return;
+    }
+    input.setCustomValidity('');
+    input.value = formatted;
+    let position = 0, count = 0;
+    while (position < formatted.length && count < significantBeforeCaret) {
+        if (formatted[position] !== ',') count++;
+        position++;
+    }
+    input.setSelectionRange(position, position);
+    if (recalculate) calculateAccumulatedMoney();
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const money = document.getElementById('contractValue');
+    if (!money) return;
+    money.addEventListener('input', event => { if (!event.isComposing) formatContractMoneyInput(money); });
+    money.addEventListener('compositionend', () => formatContractMoneyInput(money));
+    money.addEventListener('blur', () => formatContractMoneyInput(money));
+});
+
+
+// Prior-record lookup is scoped to all five criteria, never just the subject.
+let contractRequestId = 0;
+let visitRequestId = 0;
+let previousContractLookupKey = null;
+let submissionInstallmentEdited = false;
+document.addEventListener('DOMContentLoaded', () => {
+    const installment = document.getElementById('submissionInstallment');
+    if (installment) installment.addEventListener('input', () => { submissionInstallmentEdited = true; });
+});
+function normalizeLookupText(value) { return String(value == null ? '' : value).trim(); }
+function normalizeBudgetYear(value) {
+    return normalizeLookupText(value).replace(/[๐-๙]/g, digit => String('๐๑๒๓๔๕๖๗๘๙'.indexOf(digit)));
+}
+function getContractLookup() {
+    const read = id => document.getElementById(id)?.value || '';
+    return { budgetYear: normalizeBudgetYear(read('fiscalYear')), location: normalizeLookupText(read('locationInput')),
+        category: normalizeLookupText(read('categoryInput')), pwiCode: normalizeLookupText(read('pwiInput')), subject: normalizeLookupText(read('subject')) };
+}
+function getContractLookupKey() {
+    const values = Object.values(getContractLookup());
+    return values.every(Boolean) ? JSON.stringify(values) : '';
+}
+function lookupMatchesResponse(expected, actual) {
+    return actual && Object.keys(expected).every(key => expected[key] === (key === 'budgetYear' ? normalizeBudgetYear(actual[key]) : normalizeLookupText(actual[key])));
+}
+function normalizeSupervisorNames(raw) {
+    if (Array.isArray(raw)) return raw;
+    try { const parsed = JSON.parse(raw); if (Array.isArray(parsed)) return parsed; } catch (error) {}
+    return String(raw || '').split(',').map(name => name.trim()).filter(Boolean);
+}
+function clearContractAutofill() {
+    ++visitRequestId;
+    submissionInstallmentEdited = false;
+    const installment = document.getElementById('submissionInstallment');
+    if (installment) installment.value = '1';
+    const fields = ['companyName','contractStart','contractEnd','contractDays','contractValue','contractVisits',
+        'currentVisit','accumulatedMoney','contractSigningDate','expectedWorkers','workStart','workEnd','workDays','contractNumber','committeeChair','committeeChairName','committeeChairPosition','chiefSupervisor','chiefSupervisorName','chiefSupervisorPosition','supervisorPopupTrigger','supervisorsData','supervisorsPeople'];
+    fields.forEach(name => {
+        const field = document.getElementById(name) || document.getElementsByName(name)[0];
+        if (!field) return;
+        field.value = '';
+        field.removeAttribute('data-date');
+        if (field._flatpickr) field._flatpickr.clear(false);
+        try { localStorage.removeItem('form_global_cache_' + (field.id || field.name)); } catch (error) {}
+    });
+    const signingStatus = document.getElementById('contractSigningDateStatus');
+    if (signingStatus) signingStatus.textContent = '';
+    try { localStorage.removeItem('form_global_cache_supervisor_subject'); } catch (error) {}
+}
+function refreshContractLookup() {
+    const key = getContractLookupKey();
+    if (key === previousContractLookupKey) return;
+    previousContractLookupKey = key;
+    fetchContractDetails(getContractLookup().subject);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    // Fiscal year must be selected explicitly; do not restore an old default.
+    const year = document.getElementById('fiscalYear');
+    if (year) year.value = '';
+    setTimeout(refreshContractLookup, 0);
+    ['fiscalYear','locationInput','categoryInput','pwiInput','subject'].forEach(id => {
+        const field = document.getElementById(id);
+        if (!field) return;
+        field.addEventListener('change', refreshContractLookup);
+        field.addEventListener('input', refreshContractLookup);
+        field.addEventListener('blur', refreshContractLookup);
+    });
+    // Existing popup handlers assign .value directly without dispatching change.
+    document.addEventListener('click', () => setTimeout(refreshContractLookup, 0));
+});
 document.addEventListener("DOMContentLoaded", () => {
     
     const today = new Date();
@@ -229,15 +1038,75 @@ document.getElementById('workEnd').addEventListener('change', () => calculateDay
 async function submitForm() {
     const form = document.getElementById('mahidolForm');
     const submitBtn = document.querySelector('.submit-btn');
+    if (document.getElementById('jobStatusInput')?.value === 'ไม่แล้วเสร็จ' && !document.getElementById('jobDetailInput')?.value.trim()) {
+        alert('กรุณาระบุเหตุผลที่งานไม่แล้วเสร็จ');
+        document.getElementById('jobDetailInput')?.focus();
+        return;
+    }
     
     if (!CONFIG || !CONFIG.GOOGLE_SCRIPT_URL) {
         alert("กรุณาตั้งค่า GOOGLE_SCRIPT_URL ในไฟล์ config.js ให้ถูกต้อง");
         return;
     }
     
+    if (!getContractLookupKey()) {
+        alert('กรุณาเลือกปีงบประมาณ สถานที่ หมวดหมู่งาน P/WI และเรื่องที่ดำเนินการให้ครบ');
+        return;
+    }
+    refreshContractLookup();
     const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => { data[key] = value; });
+    data.budgetYear = getContractLookup().budgetYear;
+    ['committeeChair','chiefSupervisor'].forEach(id => {
+        const field = document.getElementById(id);
+        if (field) data[id] = getPersonnelName(field);
+    });
+    const money = normalizeContractMoney(data.contractValue);
+    if (money === null) {
+        alert('กรุณากรอกมูลค่าสัญญาเป็นตัวเลข เช่น 1,000,000.50');
+        return;
+    }
+    data.contractValue = money;
+    const accumulatedMoney = normalizeContractMoney(data.accumulatedMoney);
+    if (accumulatedMoney === null) {
+        alert('กรุณากรอกเงินสะสมเป็นตัวเลข');
+        return;
+    }
+    data.accumulatedMoney = accumulatedMoney;
+
+    // === 🟢 เพิ่มโค้ดดึงค่าจาก 4 ฟิลด์ใหม่ตรงนี้ ===
+    // เช็คก่อนว่ามีอิลิเมนต์ในหน้าเว็บหรือไม่ เพื่อป้องกัน Error
+    if (document.getElementById('contractSigningDate')) {
+        data['contractSigningDate'] = document.getElementById('contractSigningDate').getAttribute('data-date') || document.getElementById('contractSigningDate').value;
+    }
+    if (document.getElementById('submissionLetterNo')) {
+        data['submissionLetterNo'] = document.getElementById('submissionLetterNo').value;
+    }
+    if (document.getElementById('submissionDate')) {
+        data['submissionDate'] = document.getElementById('submissionDate').getAttribute('data-date') || document.getElementById('submissionDate').value;
+    }
+    if (document.getElementById('submissionInstallment')) {
+        data['submissionInstallment'] = document.getElementById('submissionInstallment').value;
+        if (!/^[1-9]\d*$/.test(data['submissionInstallment'])) {
+            alert('กรุณาระบุงวดส่งงานเป็นจำนวนเต็มตั้งแต่ 1 ขึ้นไป');
+            return;
+        }
+    }
+    // =======================================
+
+    // รวบรวมรายชื่อผู้ควบคุมงานจาก Popup ( Hidden Input: supervisorsData )
+    const supervisorsDataRaw = document.getElementById('supervisorsData')?.value;
+    if (supervisorsDataRaw) {
+        try {
+            const supArray = JSON.parse(supervisorsDataRaw);
+            data['supervisorsData'] = supArray.join(', '); // รวมรายชื่อเป็นข้อความคั่นด้วยลูกน้ำ
+        } catch(e) {
+            data['supervisorsData'] = supervisorsDataRaw;
+        }
+    } else {
+        data['supervisorsData'] = '';
+    }
 
     // แปลงค่าวันที่ทั้ง 4 ช่องให้อยู่ในรูปแบบภาษาไทยเต็ม (เช่น 1 กันยายน 2569)
     const dateInputIds = ['contractStart', 'contractEnd', 'workStart', 'workEnd'];
@@ -263,78 +1132,72 @@ async function submitForm() {
     submitBtn.disabled = true;
     submitBtn.innerText = 'กำลังบันทึกข้อมูล...';
 
-    // เด้ง SweetAlert2 ทันทีโดยไม่ต้องรอผลจาก Sheet
-    Swal.fire({
-        icon: 'success',
-        title: 'ส่งข้อมูลเรียบร้อย!',
-        text: 'ระบบรับทราบและกำลังนำข้อมูลเข้าชีทในเบื้องหลัง',
-        confirmButtonText: 'ตกลง',
-        confirmButtonColor: '#28a745'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // ล้างแคชฟอร์มและรีเฟรชหน้า
-            const cachedInputs = document.querySelectorAll('.save-cache');
-            cachedInputs.forEach(input => {
-                const key = "form_global_cache_" + (input.id || input.name);
-                localStorage.removeItem(key);
-            });
-            window.location.reload();
-        }
-    });
+    try {
+        // 1. รอให้ส่งข้อมูลไป Google Sheet ให้เสร็จก่อน (เพิ่ม await)
+        const response = await fetch(CONFIG.GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
 
-    // ส่งข้อมูลไปหลังบ้านเงียบๆ (Background Process)
-    fetch(CONFIG.GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(data)
-    }).then(response => response.json())
-      .then(result => {
-          if (result.status === 'success') {
-              console.log('บันทึกลงชีทสำเร็จ:', result.message);
-          } else {
-              console.error('พบปัญหาฝั่งชีท:', result.message);
-          }
-      })
-      .catch(error => console.error('Error:', error))
-      .finally(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerText = 'บันทึกข้อมูล';
-      });
+        if (result.status === 'success') {
+            console.log('บันทึกลงชีทสำเร็จ:', result.message);
+            
+            // 2. เด้ง Popup เมื่อส่งข้อมูลสำเร็จแล้วจริงๆ
+            Swal.fire({
+                icon: 'success',
+                title: 'ส่งข้อมูลเรียบร้อย!',
+                text: 'ระบบบันทึกข้อมูลลงชีทสำเร็จ',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#28a745'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    // ล้างแคชฟอร์มรวมถึงแคชรายชื่อผู้ควบคุมงาน
+                    const cachedInputs = document.querySelectorAll('.save-cache');
+                    cachedInputs.forEach(input => {
+                        const key = "form_global_cache_" + (input.id || input.name);
+                        localStorage.removeItem(key);
+                    });
+                    localStorage.removeItem('form_global_cache_supervisorsData');
+                    
+                    window.location.reload();
+                }
+            });
+        } else {
+            console.error('พบปัญหาฝั่งชีท:', result.message);
+            alert('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์: ' + result.message);
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'บันทึกข้อมูล';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('ไม่สามารถเชื่อมต่อกับระบบได้ กรุณาลองใหม่อีกครั้ง');
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'บันทึกข้อมูล';
+    }
 }
 
 async function updateVisitCount() {
-    const subjectInput = document.getElementById('subject');
-    const contractVisitsInput = document.getElementById('contractVisits');
-    const currentVisitInput = document.getElementById('currentVisit');
-
-    const subject = subjectInput.value.trim();
-    const totalVisits = contractVisitsInput.value.trim() || '?';
-
-    if (!subject) {
-        currentVisitInput.value = '';
-        calculateAccumulatedMoney(); // เคลียร์เงินสะสมถ้าไม่ได้เลือกเรื่อง
-        return;
-    }
-
-    currentVisitInput.value = 'กำลังนับ...';
-
+    const lookup = getContractLookup();
+    const key = getContractLookupKey();
+    const requestId = ++visitRequestId;
+    const output = document.getElementById('currentVisit');
+    if (!output) return;
+    output.value = '';
+    if (!key || !CONFIG || !CONFIG.GOOGLE_SCRIPT_URL) return;
     try {
-        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getVisitCount&subject=${encodeURIComponent(subject)}`);
+        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?${new URLSearchParams({ action: 'getVisitCount', ...lookup })}`);
         const result = await response.json();
-        
-        if (result.status === 'success') {
-            const nextVisitNumber = result.count + 1;
-            currentVisitInput.value = `${nextVisitNumber}/${totalVisits}`;
-        } else {
-            currentVisitInput.value = `1/${totalVisits}`;
+        if (requestId !== visitRequestId || key !== getContractLookupKey()) return;
+        if (result.status === 'success' && lookupMatchesResponse(lookup, result.lookup) && Number.isInteger(result.count) && result.count >= 0) {
+            const total = document.getElementById('contractVisits').value.trim() || '?';
+            output.value = `${result.count + 1}/${total}`;
+            const installment = document.getElementById('submissionInstallment');
+            if (installment && !submissionInstallmentEdited) installment.value = String(result.count + 1);
         }
-    } catch (error) {
-        console.error('Error fetching visit count:', error);
-        currentVisitInput.value = `1/${totalVisits}`;
-    } finally {
-        // คำนวณเงินสะสมอัตโนมัติหลังจากนับครั้งเสร็จสิ้น
-        calculateAccumulatedMoney();
-    }
+    } catch (error) { console.error('Error fetching visit count:', error); }
+    if (requestId === visitRequestId && key === getContractLookupKey()) calculateAccumulatedMoney();
 }
 
 document.getElementById('subject').addEventListener('blur', updateVisitCount);
@@ -595,7 +1458,7 @@ document.getElementById('contractVisits').addEventListener('input', () => {
     }
 
     // ผูก Event ให้ช่องวันที่ทั้ง 4 ช่อง
-    const dateInputIds = ['contractStart', 'contractEnd', 'workStart', 'workEnd'];
+    const dateInputIds = ['contractSigningDate', 'submissionDate', 'contractStart', 'contractEnd', 'workStart', 'workEnd'];
     dateInputIds.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -606,11 +1469,10 @@ document.getElementById('contractVisits').addEventListener('input', () => {
                 const label = input.closest('.form-group')?.querySelector('label')?.textContent || 'เลือกวันที่';
                 if (dateModalTitle) dateModalTitle.textContent = `เลือก${label}`;
 
-                if (input.value) {
-                    const parts = input.value.split('-');
-                    if (parts.length === 3) {
-                        currentCalDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-                    }
+                const savedDate = input.getAttribute('data-date') || parseAndFormatThaiDate(input.value).isoDate;
+                if (savedDate) {
+                    const parts = savedDate.split('-').map(Number);
+                    currentCalDate = new Date(parts[0], parts[1] - 1, parts[2]);
                 } else {
                     currentCalDate = new Date();
                 }
@@ -684,7 +1546,7 @@ document.getElementById('contractVisits').addEventListener('input', () => {
                 dayCell.classList.add('today');
             }
 
-            if (activeDateInput && activeDateInput.value === dateStr) {
+            if (activeDateInput && (activeDateInput.getAttribute('data-date') || parseAndFormatThaiDate(activeDateInput.value).isoDate) === dateStr) {
                 dayCell.classList.add('selected');
             }
 
@@ -699,6 +1561,10 @@ document.getElementById('contractVisits').addEventListener('input', () => {
                     
                     // 3. เก็บค่า YYYY-MM-DD ซ่อนไว้ใน attribute เพื่อใช้คำนวณจำนวนวัน
                     activeDateInput.setAttribute('data-date', dateStr);
+                    if (activeDateInput.id === 'contractSigningDate') {
+                        const status = document.getElementById('contractSigningDateStatus');
+                        if (status) status.textContent = '';
+                    }
                     
                     // 4. สั่งคำนวณวัน
                     if (activeDateInput.id === 'contractStart' || activeDateInput.id === 'contractEnd') {
@@ -724,14 +1590,16 @@ document.getElementById('contractVisits').addEventListener('input', () => {
     }
     // เพิ่ม 3 ฟิลด์ใหม่เข้าใน hseData
 const hseData = {
+    budgetYear: ["2567", "2568", "2569", "2570", "2571"], // เพิ่มบรรทัดนี้และปรับปีตามต้องการ
     healthCheckTypeInput: ["ตรวจสุขภาพก่อนเข้างาน", "ตรวจสุขภาพประจำปี", "ตรวจสุขภาพตามปัจจัยเสี่ยง", "ตรวจสุขภาพก่อนกลับเข้าทำงาน (หลังป่วยหนักหรือเจ็บป่วยจากการทำงาน)", "ไม่เกี่ยวข้อง (ในสัญญาไม่มีการกำกับควบคุม)"],
+    // ... (โค้ดเดิม)
     healthCheckResultInput: ["พร้อมทำงานปกติ", "พร้อมทำงานแต่มีเงื่อนไข ( - เช่น ห้ามยกของหนัก)", "ไม่พร้อมทำงาน", "รอผลการตรวจวินิจฉัยเพิ่มเติม", "ไม่เกี่ยวข้อง (ในสัญญาไม่มีการกำกับควบคุม)"],
     coshemInput: ["ผ่านการอบรม", "ยังไม่ผ่านการอบรม / รอคิวอบรม", "ไม่ผ่านการอบรม", "บัตรอบรมหมดอายุ", "ไม่เกี่ยวข้อง (ในสัญญาไม่มีการกำกับควบคุม)"],
     criminalCheckInput: ["ผ่าน / ไม่พบประวัติ", "ไม่ผ่าน / พบประวัติความผิดร้ายแรง", "ผ่านแบบมีเงื่อนไข (เช่น ความผิดลหุโทษในอดีตที่บริษัทอนุโลม)", "อยู่ระหว่างตรวจสอบ", "ไม่เกี่ยวข้อง (ในสัญญาไม่มีการกำกับควบคุม)"],
     drugTestInput: ["ผ่าน / ไม่พบสารเสพติด", "ไม่ผ่าน / พบสารเสพติด", "อยู่ระหว่างรอผลจากห้องปฏิบัติการ", "ปฏิเสธการตรวจ", "ไม่เกี่ยวข้อง (ในสัญญาไม่มีการกำกับควบคุม)"],
     workPermitInput: ["ใบอนุญาตทำงานในที่อับอากาศ", "ใบอนุญาตทำงานบนที่สูง", "ใบอนุญาตทำงานที่ทำให้เกิดความร้อน/ประกายไฟ", "ไม่เกี่ยวข้อง (ในสัญญาไม่มีการกำกับควบคุม)"],
     permitStatusInput: ["รอการอนุมัติ", "อนุมัติแล้ว / กำลังดำเนินการ", "ระงับการทำงานชั่วคราว ( เช่น สภาพอากาศไม่อำนวย หรือพบความไม่ปลอดภัย)", "ไม่อนุมัติ", "ปิดงานสมบูรณ์", "ยกเลิก", "ไม่เกี่ยวข้อง (ในสัญญาไม่มีการกำกับควบคุม)"],
-    sdsStatusInput: ["ไม่อนุมัติ / สารเคมีห้ามใช้", "รออนุมัติใช้งาน / รอตรวจสอบ", "อนุมัติให้ใช้ (มี SDS ฉบับปรับปรุงล่าสุด)", "SDS หมดอายุ / ต้องขอฉบับใหม่จากผู้ผลิต (ต้องทบทวนทุก 3-5 ปี)"],
+    sdsStatusInput: ["ไม่เกี่ยวข้องกับสารเคมี", "ไม่อนุมัติ / สารเคมีห้ามใช้", "รออนุมัติใช้งาน / รอตรวจสอบ", "อนุมัติให้ใช้ (มี SDS ฉบับปรับปรุงล่าสุด)", "SDS หมดอายุ / ต้องขอฉบับใหม่จากผู้ผลิต (ต้องทบทวนทุก 3-5 ปี)"],
 
     // --- เพิ่ม 3 รายการใหม่ตรงนี้ ---
     // ... (โค้ดก่อนหน้า)
@@ -758,6 +1626,7 @@ const hseData = {
         "จำเป็น - เพื่อรายงานเป็นข้อมูล/สถิติเท่านั้น (เช่น รายงานสรุปการซ่อมบำรุง หรือรายงานอุบัติการณ์ประจำเดือน)"
     ],
     jobStatusInput: [
+        "ไม่แล้วเสร็จ",
         "แล้วเสร็จ เป็นไปตามเงื่อนไขของสัญญา",
         "แล้วเสร็จ เป็นไปตามเงื่อนไขของสัญญา แต่มีการดำเนินการซ่อมแซม ดำเนินการได้เอง",
         "แล้วเสร็จ เป็นไปตามเงื่อนไขของสัญญา แต่มีการดำเนินการซ่อมแซม ส่งพัสดุมหาลัย"
@@ -767,26 +1636,7 @@ const hseData = {
     
 };
 
-    const chemicalHazardMap = {
-        "น้ำยาล้างห้องน้ำ / น้ำยาล้างสุขภัณฑ์": "สารกัดกร่อน",
-        "น้ำยาถูพื้น / น้ำยาทำความสะอาดอเนกประสงค์": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-        "น้ำยาเช็ดกระจก": "วัตถุไวไฟ (ถ้ามีส่วนผสมของแอลกอฮอล์) / สารกัดกร่อน",
-        "น้ำยาฆ่าเชื้อ": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-        "น้ำมันหล่อลื่น / จาระบี": "อันตรายต่อสิ่งแวดล้อมทางน้ำ / วัตถุไวไฟ",
-        "น้ำยาล้างคอยล์แอร์ / สารทำความเย็น": "สารกัดกร่อน (ล้างคอยล์) / ก๊าซภายใต้ความดัน (สารทำความเย็น)",
-        "สารเคมีเติมระบบ Cooling Tower": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-        "น้ำยาล้างสนิม / ล้างตะกรัน": "สารกัดกร่อน",
-        "ก๊าซออกซิเจน / ก๊าซอาร์กอน (สำหรับงานเชื่อม)": "ก๊าซภายใต้ความดัน",
-        "สีน้ำ / สีน้ำมัน": "วัตถุไวไฟ (โดยเฉพาะสีน้ำมัน) / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-        "ทินเนอร์": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
-        "น้ำยาผสมคอนกรีต": "สารกัดกร่อน / อันตรายต่อสุขภาพ",
-        "กาวอุตสาหกรรม / ซิลิโคน": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
-        "สารกำจัดวัชพืช": "สารกัดกร่อน / อันตรายต่อสุขภาพ",
-        "สารกำจัดแมลง / น้ำยาฉีดพ่นยุง": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
-        "ปุ๋ยเคมี": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-        "ถังดับเพลิง": "ก๊าซภายใต้ความดัน",
-        "ไม่เกี่ยวข้องกับสารเคมี": "-"
-    };
+
     
 
     // ==========================================
@@ -801,6 +1651,7 @@ const hseData = {
         const inputEl = document.getElementById(inputId);
         if (inputEl) {
             inputEl.addEventListener('click', () => {
+                if (inputId === 'jobDetailInput' && document.getElementById('jobStatusInput')?.value === 'ไม่แล้วเสร็จ') return;
                 currentGenericInput = inputEl;
                 titleGeneric.innerText = `เลือก${inputEl.previousElementSibling.innerText}`;
                 listGeneric.innerHTML = '';
@@ -845,6 +1696,7 @@ const hseData = {
             currentGenericInput.classList.remove('custom-red-placeholder');
         }
         modalGeneric.classList.remove('active');
+        if (currentGenericInput.id === 'jobStatusInput') syncIncompleteJobDetail();
     }
 
     // ==========================================
@@ -871,30 +1723,14 @@ const hseData = {
             const checkedBoxes = modal.querySelectorAll('input[type="checkbox"]:checked');
             let selectedVals = [];
             let hasCustom = false;
-            let hazards = [];
 
             checkedBoxes.forEach(cb => {
                 if (cb.value === 'custom') {
                     hasCustom = true;
                 } else {
                     selectedVals.push(cb.value);
-                    if (isChemical && chemicalHazardMap[cb.value]) {
-                        hazards.push(chemicalHazardMap[cb.value]);
-                    }
                 }
             });
-
-            // อัปเดตช่องอันตรายอัตโนมัติ (เฉพาะสารเคมี) - เพิ่มการเช็คเพื่อไม่ให้โค้ดค้าง
-            if (isChemical) {
-                const hazardInput = document.getElementById('hazardTypeInput');
-                if (hazardInput) {
-                    if (hasCustom) hazards.push("อันตรายต่อสิ่งแวดล้อมทางน้ำ / อันตรายต่อสุขภาพ");
-                    
-                    // กรองข้อมูลไม่ให้ซ้ำกัน (Deduplicate)
-                    let uniqueHazards = [...new Set(hazards)];
-                    hazardInput.value = uniqueHazards.join(', ');
-                }
-            }
 
             // จัดการกรณีเลือก "อื่นๆ" ในแบบ Multi-select
             if (hasCustom) {
@@ -908,6 +1744,7 @@ const hseData = {
                 inputEl.classList.remove('custom-red-placeholder');
                 inputEl.value = selectedVals.join(', ');
             }
+            if (isChemical) updateHazardType(selectedVals, hasCustom);
             
             modal.classList.remove('active');
         });
@@ -919,7 +1756,7 @@ const hseData = {
     // กดพื้นหลังดำเพื่อปิด
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
-            if(e.target === overlay) overlay.classList.remove('active');
+            if (e.target === overlay && overlay.id !== 'supervisorsModal') overlay.classList.remove('active');
         });
     });
     function selectHazard(value) {
@@ -1034,6 +1871,7 @@ setupSimpleModal('impactLevelInput', 'impactLevelModal', 'closeImpactLevelModal'
 setupSimpleModal('reviewStatusInput', 'reviewStatusModal', 'closeReviewStatusModal', 'reviewStatusList');
 setupSimpleModal('jobStatusInput', 'jobStatusModal', 'closeJobStatusModal', 'jobStatusList');
 setupSimpleModal('meetingRequiredInput', 'meetingRequiredModal', 'closeMeetingRequiredModal', 'meetingRequiredList');
+setupSimpleModal('budgetYear', 'budgetYearModal', 'closeBudgetYearModal', 'budgetYearList');
 
 // ==========================================
 // ฐานข้อมูล "เรื่องที่ดำเนินการ" ตามรหัส P/WI (พร้อมลำดับตัวเลข)
@@ -1207,12 +2045,21 @@ const subjectList = document.getElementById('subjectList');
 if (subjectInput && subjectModal) {
     subjectInput.addEventListener('click', () => {
         const currentPwi = document.getElementById('pwiInput') ? document.getElementById('pwiInput').value : '';
+        
+        // --- เพิ่มโค้ดเช็คปีงบประมาณตรงนี้ ---
+        const budgetYearInput = document.getElementById('fiscalYear');
+        if (budgetYearInput && !budgetYearInput.value) {
+            alert('กรุณาระบุ "ปีงบประมาณ" ก่อนเลือกเรื่องที่ดำเนินการ');
+            return;
+        }
+        // --------------------------------
 
         // แจ้งเตือนหากยังไม่ได้เลือก P/WI
         if (!currentPwi) {
             alert('กรุณาเลือก "ชื่อ-รหัส-ระเบียบปฏิบัติ (P/WI)" ก่อนเลือกเรื่องที่ดำเนินการ');
             return;
         }
+// ... โค้ดเดิม ...
 
         // หากสถานะเป็น readonly ไม่ต้องเปิดคีย์บอร์ดมือถือ
         if (subjectInput.hasAttribute('readonly')) {
@@ -1260,15 +2107,7 @@ if (subjectInput && subjectModal) {
 subjectInput.style.cursor = 'pointer';
 subjectInput.value = val || this.textContent.trim();
 
-// เรียกคำนวณนับครั้งอัตโนมัติ
-if (typeof updateVisitCount === 'function') {
-    updateVisitCount();
-}
-
-// === เพิ่มบรรทัดนี้ เพื่อดึงข้อมูลสัญญาและจำนวนวันมาลงให้อัตโนมัติ ===
-if (typeof fetchContractDetails === 'function') {
-    fetchContractDetails(subjectInput.value);
-}
+refreshContractLookup();
                     }
 
                     subjectModal.classList.remove('active');
@@ -1342,6 +2181,7 @@ document.addEventListener('click', function(e) {
 
         if (jobStatusField && jobDetailField) {
             const status = jobStatusField.value;
+            if (syncIncompleteJobDetail()) return;
 
             // 1. ถ้าเลือก: แล้วเสร็จ เป็นไปตามเงื่อนไขของสัญญา
             if (status === "แล้วเสร็จ เป็นไปตามเงื่อนไขของสัญญา") {
@@ -1386,100 +2226,66 @@ document.addEventListener('click', function(e) {
     }, 150); // ดีเลย์ 150ms 
 });
 
-// 1. สร้าง Object เก็บข้อมูลความสัมพันธ์ของสารเคมีและประเภทอันตราย
-const hazardMapping = {
-  "น้ำยาล้างห้องน้ำ / น้ำยาล้างสุขภัณฑ์": "สารกัดกร่อน",
-  "น้ำยาถูพื้น / น้ำยาทำความสะอาดอเนกประสงค์": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-  "น้ำยาเช็ดกระจก": "วัตถุไวไฟ (ถ้ามีส่วนผสมของแอลกอฮอล์) / สารกัดกร่อน",
-  "น้ำยาฆ่าเชื้อ": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-  "น้ำมันหล่อลื่น / จาระบี": "อันตรายต่อสิ่งแวดล้อมทางน้ำ / วัตถุไวไฟ",
-  "น้ำยาล้างคอยล์แอร์ / สารทำความเย็น": "สารกัดกร่อน (ล้างคอยล์) / ก๊าซภายใต้ความดัน (สารทำความเย็น)",
-  "สารเคมีเติมระบบ Cooling Tower": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-  "น้ำยาล้างสนิม / ล้างตะกรัน": "สารกัดกร่อน",
-  "ก๊าซออกซิเจน / ก๊าซอาร์กอน (สำหรับงานเชื่อม)": "ก๊าซภายใต้ความดัน",
-  "สีน้ำ / สีน้ำมัน": "วัตถุไวไฟ (โดยเฉพาะสีน้ำมัน) / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-  "ทินเนอร์": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
-  "น้ำยาผสมคอนกรีต": "สารกัดกร่อน / อันตรายต่อสุขภาพ",
-  "กาวอุตสาหกรรม / ซิลิโคน": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
-  "สารกำจัดวัชพืช": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-  "สารกำจัดแมลง / น้ำยาฉีดพ่นยุง": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
-  "ปุ๋ยเคมี": "อันตรายต่อสิ่งแวดล้อมทางน้ำ / อันตรายต่อสุขภาพ",
-  "ถังดับเพลิง": "ก๊าซภายใต้ความดัน",
-  "ไม่เกี่ยวข้องกับสารเคมี": "-",
-  "อื่นๆ (โปรดระบุ)": ""
-};
+const chemicalHazardMap = {
+        "น้ำยาล้างห้องน้ำ / น้ำยาล้างสุขภัณฑ์": "สารกัดกร่อน",
+        "น้ำยาถูพื้น / น้ำยาทำความสะอาดอเนกประสงค์": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
+        "น้ำยาเช็ดกระจก": "วัตถุไวไฟ (ถ้ามีส่วนผสมของแอลกอฮอล์) / สารกัดกร่อน",
+        "น้ำยาฆ่าเชื้อ": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
+        "น้ำมันหล่อลื่น / จาระบี": "อันตรายต่อสิ่งแวดล้อมทางน้ำ / วัตถุไวไฟ",
+        "น้ำยาล้างคอยล์แอร์ / สารทำความเย็น": "สารกัดกร่อน (ล้างคอยล์) / ก๊าซภายใต้ความดัน (สารทำความเย็น)",
+        "สารเคมีเติมระบบ Cooling Tower": "สารกัดกร่อน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
+        "น้ำยาล้างสนิม / ล้างตะกรัน": "สารกัดกร่อน",
+        "ก๊าซออกซิเจน / ก๊าซอาร์กอน (สำหรับงานเชื่อม)": "ก๊าซภายใต้ความดัน",
+        "สีน้ำ / สีน้ำมัน": "วัตถุไวไฟ (โดยเฉพาะสีน้ำมัน) / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
+        "ทินเนอร์": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
+        "น้ำยาผสมคอนกรีต": "สารกัดกร่อน / อันตรายต่อสุขภาพ",
+        "กาวอุตสาหกรรม / ซิลิโคน": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
+        "สารกำจัดวัชพืช": "สารกัดกร่อน / อันตรายต่อสุขภาพ",
+        "สารกำจัดแมลง / น้ำยาฉีดพ่นยุง": "วัตถุไวไฟ / อันตรายต่อสุขภาพ",
+        "ปุ๋ยเคมี": "สารพิษเฉียบพลัน / อันตรายต่อสิ่งแวดล้อมทางน้ำ",
+        "ถังดับเพลิง": "ก๊าซภายใต้ความดัน",
+        "ไม่เกี่ยวข้องกับสารเคมี": "-"
+    };
 
-// 2. ฟังก์ชันจับคู่และอัปเดตข้อมูล
-function updateHazardType() {
-  // สมมติว่า ID ของช่องเลือกสารเคมีคือ 'sdsName'
-  // หากใช้ ID อื่น ให้เปลี่ยนตรงนี้
-  const sdsSelect = document.getElementById('sdsName'); 
-  
-  // สมมติว่า ID ของช่องประเภทอันตรายคือ 'hazardType'
-  const hazardInput = document.getElementById('hazardType'); 
-
-  if (!sdsSelect || !hazardInput) return;
-
-  // ดึงค่าทั้งหมดที่ถูกเลือก (รองรับการเลือกหลายรายการ)
-  const selectedOptions = Array.from(sdsSelect.selectedOptions).map(opt => opt.value);
-  
-  // ใช้ Set เพื่อป้องกันการแสดงผลประเภทอันตรายซ้ำกัน
-  const uniqueHazards = new Set();
-
-  selectedOptions.forEach(chemical => {
-    if (hazardMapping[chemical]) {
-      // แยกประเภทอันตรายด้วย ' / ' เพื่อจัดกลุ่มใหม่
-      const hazards = hazardMapping[chemical].split(' / ');
-      hazards.forEach(h => uniqueHazards.add(h.trim()));
-    }
-  });
-
-  // นำประเภทอันตรายที่รวมแล้วมาเชื่อมกันด้วย ' / ' เหมือนเดิม
-  hazardInput.value = Array.from(uniqueHazards).join(' / ');
-
-  // กรณีที่ช่อง hazardType ใช้ปลั๊กอินอย่าง Select2 อาจต้องกระตุ้นอีเวนต์ change ด้วย
-  // $(hazardInput).trigger('change'); 
+function updateHazardType(selectedChemicals, hasCustom = false) {
+    const source = document.getElementById('sdsNameInput');
+    const target = document.getElementById('hazardTypeInput');
+    if (!source || !target) return;
+    const values = Array.isArray(selectedChemicals) ? selectedChemicals :
+        source.value.split(',').map(value => value.trim()).filter(Boolean);
+    const hazards = [];
+    values.forEach(value => {
+        if (chemicalHazardMap[value]) hazards.push(chemicalHazardMap[value]);
+    });
+    target.value = [...new Set(hazards)].join(', ');
+    // Unknown/custom chemicals require the actual SDS; never guess their hazards.
+    target.placeholder = hasCustom || values.some(value => !chemicalHazardMap[value])
+        ? 'สารเคมีอื่น: ตรวจ SDS และระบุประเภทอันตราย' : 'คลิกเพื่อเลือก หรือดึงจากสารเคมี';
+    try {
+        localStorage.setItem('form_global_cache_sdsNameInput', source.value);
+        localStorage.setItem('form_global_cache_hazardTypeInput', target.value);
+    } catch (error) {}
+    target.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
-// 3. ผูกฟังก์ชันเข้ากับเหตุการณ์ (Event Listener) เมื่อมีการเปลี่ยนค่า
-document.addEventListener("DOMContentLoaded", function() {
-  const sdsSelect = document.getElementById('sdsName');
-  if (sdsSelect) {
-    // ใช้กับ HTML Select ทั่วไป
-    sdsSelect.addEventListener('change', updateHazardType);
-    
-    // **หมายเหตุ:** หากคุณใช้ปลั๊กอิน Select2 (จากหน้าตาในรูป) จะต้องใช้ jQuery จับ Event แทนแบบนี้:
-    // $('#sdsName').on('change', updateHazardType);
-  }
+document.addEventListener('DOMContentLoaded', () => {
+    const source = document.getElementById('sdsNameInput');
+    const target = document.getElementById('hazardTypeInput');
+    if (source) {
+        source.addEventListener('change', () => updateHazardType());
+        source.addEventListener('input', () => updateHazardType());
+        // The HTML cache restore runs in the same DOMContentLoaded event.
+        setTimeout(() => { if (source.value && target && !target.value) updateHazardType(); }, 0);
+    }
+    const accumulated = document.getElementById('accumulatedMoney');
+    if (accumulated) {
+        accumulated.addEventListener('input', event => {
+            if (!event.isComposing) formatContractMoneyInput(accumulated, false);
+        });
+        accumulated.addEventListener('blur', () => formatContractMoneyInput(accumulated, false));
+    }
 });
 
-async function fetchContractDetails(subject) {
-    if (!subject || !CONFIG || !CONFIG.GOOGLE_SCRIPT_URL) return;
-
-    try {
-        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getContractDetails&subject=${encodeURIComponent(subject)}`);
-        const result = await response.json();
-
-        if (result.status === 'success' && result.data) {
-            if (document.getElementsByName('companyName')[0]) document.getElementsByName('companyName')[0].value = result.data.companyName || '';
-            if (document.getElementById('contractStart')) document.getElementById('contractStart').value = result.data.contractStart || '';
-            if (document.getElementById('contractEnd')) document.getElementById('contractEnd').value = result.data.contractEnd || '';
-            if (document.getElementById('contractDays')) document.getElementById('contractDays').value = result.data.contractDays || '';
-            
-            const valInput = document.getElementById('contractValue') || document.getElementsByName('contractValue')[0];
-            if (valInput) valInput.value = result.data.contractValue || '';
-
-            if (document.getElementById('contractVisits')) {
-                document.getElementById('contractVisits').value = result.data.contractVisits || '';
-            }
-
-            // อัปเดตการนับครั้งและคำนวณเงินสะสมอัตโนมัติ
-            await updateVisitCount();
-        }
-    } catch (error) {
-        console.error("Error fetching contract details:", error);
-    }
-}
 // ฟังก์ชันช่วยแปลงรูปแบบวันที่ทุกประเภทให้เป็นภาษาไทยรูปแบบเต็ม
 function parseAndFormatThaiDate(dateStr) {
     if (!dateStr) return { thaiFull: '', isoDate: '' };
@@ -1541,14 +2347,35 @@ function parseAndFormatThaiDate(dateStr) {
 }
 
 // ฟังก์ชันดึงรายละเอียดสัญญาเดิมจาก Google Sheets
+
+// ฟังก์ชันดึงรายละเอียดสัญญาเดิมจาก Google Sheets
 async function fetchContractDetails(subject) {
-    if (!subject || !CONFIG || !CONFIG.GOOGLE_SCRIPT_URL) return;
+    const lookup = getContractLookup();
+    const key = getContractLookupKey();
+    const requestId = ++contractRequestId;
+    clearContractAutofill();
+    if (!key || !CONFIG || !CONFIG.GOOGLE_SCRIPT_URL) return;
 
     try {
-        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?action=getContractDetails&subject=${encodeURIComponent(subject)}`);
+        const response = await fetch(`${CONFIG.GOOGLE_SCRIPT_URL}?${new URLSearchParams({ action: 'getContractDetails', ...lookup })}`);
         const result = await response.json();
+        if (requestId !== contractRequestId || key !== getContractLookupKey()) return;
 
-        if (result.status === 'success' && result.data) {
+        if (result.status === 'success' && result.data && lookupMatchesResponse(lookup, result.lookup)) {
+            const signingDate = document.getElementById('contractSigningDate');
+            if (signingDate) {
+                const signingInfo = parseAndFormatThaiDate(result.data.contractSigningDate || '');
+                signingDate.value = signingInfo.thaiFull;
+                if (signingInfo.isoDate) signingDate.setAttribute('data-date', signingInfo.isoDate);
+            }
+            const signingStatus = document.getElementById('contractSigningDateStatus');
+            if (signingStatus) {
+                const reason = result.data.contractSigningDateStatus;
+                signingStatus.textContent = signingDate?.value ? '' : reason === 'missing_column' ? 'ฐานข้อมูลยังไม่มีคอลัมน์วันที่ลงนาม' : reason === 'invalid_saved_date' ? 'มีข้อมูลวันเดิมแต่รูปแบบยังอ่านไม่ได้ กรุณาตรวจเซลล์จริง' : 'ไม่พบวันที่ลงนามที่บันทึกไว้ในปีและงานชุดนี้';
+            }
+            const workers = document.getElementsByName('expectedWorkers')[0];
+            if (workers) workers.value = result.data.expectedWorkers ?? '';
+
             // 1. วันที่เริ่มสัญญา (แปลงเป็นภาษาไทยเต็ม)
             if (result.data.contractStart) {
                 const startInfo = parseAndFormatThaiDate(result.data.contractStart);
@@ -1576,7 +2403,7 @@ async function fetchContractDetails(subject) {
 
             // 4. มูลค่าสัญญา (เงิน)
             if (document.getElementsByName('contractValue')[0]) {
-                document.getElementsByName('contractValue')[0].value = result.data.contractValue || '';
+                document.getElementsByName('contractValue')[0].value = formatContractMoney(result.data.contractValue) ?? String(result.data.contractValue || '');
             }
 
             // 5. เข้าทำงานตามสัญญา (ครั้งทั้งหมด)
@@ -1594,10 +2421,64 @@ async function fetchContractDetails(subject) {
                 }
             }
 
-            // 7. คำนวณ "เข้าดำเนินการครั้งที่" ใหม่
-            if (typeof updateVisitCount === 'function') {
-                updateVisitCount();
+
+            // ==========================================
+            // นำข้อมูลสัญญาและผู้ควบคุมงานไปแสดงใน Input (โค้ดที่เพิ่มใหม่)
+            // ==========================================
+            if (document.getElementById('contractNumber')) {
+                document.getElementById('contractNumber').value = result.data.contractNumber || '';
             }
+            if (document.getElementById('committeeChair')) {
+                document.getElementById('committeeChair').value = result.data.committeeChair || '';
+            }
+            if (document.getElementById('chiefSupervisor')) {
+                document.getElementById('chiefSupervisor').value = result.data.chiefSupervisor || '';
+            }
+
+            ['committeeChair', 'chiefSupervisor'].forEach(id => {
+                const local = resolveEmbeddedPersonnel(result.data[id]);
+                if (local.status === 'success') {
+                    result.data[id + 'Position'] = local.data.position;
+                    result.data.personnelSources = {...result.data.personnelSources, [id]: 'embedded'};
+                }
+            });
+            ['committeeChairPosition', 'chiefSupervisorPosition'].forEach(id => {
+                const field = document.getElementById(id);
+                if (field) field.value = result.data[id] || '';
+            });
+            ['committeeChair', 'chiefSupervisor'].forEach(id => {
+                renderRolePerson(id, result.data[id] || '', result.data[id + 'Position'] || '');
+                const status = document.getElementById(id + 'Status');
+                if (!status) return;
+                const source = result.data.personnelSources?.[id];
+                status.textContent = source === 'saved' ? 'แสดงตำแหน่งที่เคยบันทึกไว้กับชื่อนี้' :
+                    result.data[id] && !result.data[id + 'Position'] ? 'ยังตรวจตำแหน่งจากฐานไม่ได้ กรุณาตรวจสอบชื่อกับฐานข้อมูล' : '';
+            });
+            const people = normalizePersonnel(result.data.supervisorsPeople, result.data.supervisorsData).map(person => {
+                const local = resolveEmbeddedPersonnel(person.name);
+                return local.status === 'success' ? {name: person.name, position: local.data.position} : person;
+            });
+            const peopleInput = document.getElementById('supervisorsPeople');
+            if (peopleInput) peopleInput.value = JSON.stringify(people);
+            try { localStorage.setItem('form_global_cache_supervisorsPeople', JSON.stringify(people)); } catch (error) {}
+
+            // สำหรับช่องชื่อผู้ควบคุมงาน (แสดงในช่อง Popup Trigger และเก็บค่าใน Hidden Input)
+            if (document.getElementById('supervisorPopupTrigger')) {
+                document.getElementById('supervisorPopupTrigger').value = personnelDisplay(people);
+            }
+            if (document.getElementById('supervisorsData')) {
+                const names = normalizeSupervisorNames(result.data.supervisorsData);
+                document.getElementById('supervisorsData').value = JSON.stringify(names);
+                try {
+                    localStorage.setItem('form_global_cache_supervisor_subject', key);
+                    localStorage.setItem('form_global_cache_supervisorsData', JSON.stringify(names));
+                } catch (error) {}
+            }
+            // ==========================================
+
+        }
+        if (lookupMatchesResponse(lookup, result.lookup) && (result.status === 'success' || result.status === 'not_found')) {
+            await updateVisitCount();
         }
     } catch (error) {
         console.error('Error fetching contract details:', error);
@@ -1626,7 +2507,7 @@ function calculateAccumulatedMoney() {
     if (totalVisits > 0 && currentVisitNum > 0 && contractValue > 0) {
         // สูตร: (มูลค่าเงินทั้งสัญญา / จำนวนครั้งทั้งหมด) * ครั้งที่เข้าทำรวมรอบนี้
         const accumulated = (contractValue / totalVisits) * currentVisitNum;
-        accumulatedMoneyInput.value = accumulated.toFixed(2);
+        accumulatedMoneyInput.value = formatContractMoney(accumulated.toFixed(2));
     } else {
         accumulatedMoneyInput.value = '';
     }
@@ -1635,3 +2516,317 @@ function calculateAccumulatedMoney() {
 // ผูก Event ให้คำนวณทันทีเมื่อแก้ไขมูลค่าสัญญา หรือ จำนวนครั้งตามสัญญา
 document.getElementById('contractValue')?.addEventListener('input', calculateAccumulatedMoney);
 document.getElementById('contractVisits')?.addEventListener('input', calculateAccumulatedMoney);
+// ==========================================
+// ระบบจัดการเพิ่ม/ลด ผู้ควบคุมงาน (Dynamic Fields)
+// ==========================================
+document.addEventListener('click', function(e) {
+    // กดปุ่มเพิ่ม
+    if (e.target && e.target.classList.contains('add-supervisor-btn')) {
+        const container = document.getElementById('supervisorsContainer');
+        const rowCount = container.querySelectorAll('.supervisor-row').length + 1;
+        
+        const newRow = document.createElement('div');
+        newRow.className = 'supervisor-row';
+        newRow.style.cssText = 'display: flex; gap: 10px; margin-top: 10px;';
+        
+        newRow.innerHTML = `
+            <input type="text" name="supervisor[]" placeholder="ระบุชื่อ-นามสกุล ผู้ควบคุมงานคนที่ ${rowCount}" class="supervisor-input save-cache" style="flex: 1;">
+            <button type="button" class="remove-supervisor-btn primary-btn" style="width: auto; background-color: #dc3545; padding: 10px 15px; font-size: 16px; min-width: 80px;">- ลบ</button>
+        `;
+        container.appendChild(newRow);
+    }
+    
+    // กดปุ่มลบ
+    if (e.target && e.target.classList.contains('remove-supervisor-btn')) {
+        e.target.parentElement.remove();
+        
+        // อัปเดตตัวเลข placeholder ให้เรียงลำดับใหม่
+        const rows = document.querySelectorAll('#supervisorsContainer .supervisor-row');
+        rows.forEach((row, index) => {
+            row.querySelector('input').placeholder = `ระบุชื่อ-นามสกุล ผู้ควบคุมงานคนที่ ${index + 1}`;
+        });
+    }
+});
+
+// Personnel positions are looked up by a full name, never by guessing.
+const personnelRequests = new WeakMap();
+function getPersonnelName(input) {
+    return input.dataset?.personDisplay === input.value ? input.dataset.personName : input.value.trim();
+}
+function renderPersonnelInput(input, name, position) {
+    name = String(name || '').trim(); position = String(position || '').trim();
+    input.value = name && position ? `${name} (${position})` : name;
+    if (!input.dataset) input.dataset = {};
+    input.dataset.personName = name; input.dataset.personDisplay = input.value;
+}
+function personnelDisplay(people) {
+    return people.map(person => person.position ? `${person.name} (${person.position})` : person.name).join(', ');
+}
+function renderRolePerson(id, name, position) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    name = String(name || '').trim(); position = String(position || '').trim();
+    const display = name && position ? `${name} (${position})` : name;
+    input.value = display;
+    if (!input.dataset) input.dataset = {};
+    input.dataset.personName = name; input.dataset.personDisplay = display;
+    const hiddenName = document.getElementById(id + 'Name');
+    const hiddenPosition = document.getElementById(id + 'Position');
+    if (hiddenName) hiddenName.value = name;
+    if (hiddenPosition) hiddenPosition.value = position;
+}
+
+function normalizePersonnel(raw, namesRaw) {
+    let people = raw;
+    if (typeof people === 'string') { try { people = JSON.parse(people); } catch (error) { people = []; } }
+    const names = normalizeSupervisorNames(namesRaw);
+    if (!Array.isArray(people)) people = [];
+    return names.map(name => {
+        const person = people.find(item => item && String(item.name || '').trim() === name.trim());
+        return { name, position: person ? String(person.position || '') : '' };
+    });
+}
+async function lookupPersonnel(nameInput, positionInput, status) {
+    const name = getPersonnelName(nameInput);
+    const result = resolveEmbeddedPersonnel(name);
+    positionInput.value = '';
+    if (status) status.textContent = '';
+    if (!name) return;
+    if (result.status === 'success') {
+        positionInput.value = result.data.position;
+        if (['committeeChair', 'chiefSupervisor'].includes(nameInput.id)) renderRolePerson(nameInput.id, name, positionInput.value);
+        else renderPersonnelInput(nameInput, name, positionInput.value);
+    } else if (status) {
+        status.textContent = result.status === 'ambiguous' ? 'พบชื่อซ้ำ กรุณาเลือกรายการที่ถูกต้อง' : 'ไม่พบชื่อเต็มในรายการที่ฝังไว้ กรุณาตรวจชื่อ';
+    }
+}
+let personnelListSequence = 0;
+function bindPersonnelLookup(nameInput, positionInput, status) {
+    if (!nameInput || !positionInput) return;
+    let candidates = [];
+    const list = document.createElement('div');
+    list.id = 'personnel_suggestions_' + (++personnelListSequence);
+    list.className = 'personnel-suggestions'; list.hidden = true; list.setAttribute('role', 'listbox');
+    const wrapper = document.createElement('div'); wrapper.className = 'personnel-combobox';
+    nameInput.parentElement?.insertBefore(wrapper, nameInput); wrapper.appendChild(nameInput); wrapper.appendChild(list);
+    nameInput.setAttribute('autocomplete', 'off'); nameInput.setAttribute('role', 'combobox');
+    nameInput.setAttribute('aria-autocomplete', 'list'); nameInput.setAttribute('aria-controls', list.id); nameInput.setAttribute('aria-expanded', 'false');
+    let activeOption = -1;
+    function closeSuggestions() { list.hidden = true; nameInput.setAttribute('aria-expanded', 'false'); activeOption = -1; }
+    function choose(person) {
+        nameInput.value = personnelDisplay([person]);
+        nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+        closeSuggestions(); nameInput.focus();
+    }
+    nameInput.addEventListener('blur', () => setTimeout(closeSuggestions, 150));
+    nameInput.addEventListener('keydown', event => {
+        if (event.key === 'Escape') { closeSuggestions(); return; }
+        if (list.hidden || !candidates.length) return;
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault(); activeOption = (activeOption + (event.key === 'ArrowDown' ? 1 : -1) + candidates.length) % candidates.length;
+            Array.from(list.children).forEach((button, index) => button.classList.toggle('active-option', index === activeOption));
+            list.children[activeOption]?.scrollIntoView({block: 'nearest'});
+        } else if (event.key === 'Enter' && activeOption >= 0) { event.preventDefault(); choose(candidates[activeOption]); }
+    });
+    nameInput.addEventListener('input', () => {
+        const request = (personnelRequests.get(nameInput) || 0) + 1;
+        personnelRequests.set(nameInput, request);
+        const chosen = candidates.find(person => personnelDisplay([person]) === nameInput.value);
+        if (chosen) {
+            positionInput.value = chosen.position || '';
+            if (['committeeChair', 'chiefSupervisor'].includes(nameInput.id)) renderRolePerson(nameInput.id, chosen.name, chosen.position);
+            else renderPersonnelInput(nameInput, chosen.name, chosen.position);
+            nameInput.dataset.directoryChoice = nameInput.value;
+            closeSuggestions();
+            if (status) status.textContent = '';
+            return;
+        }
+        positionInput.value = '';
+        const hiddenName = document.getElementById(nameInput.id + 'Name');
+        if (hiddenName) hiddenName.value = nameInput.value.trim();
+        if (nameInput.dataset) {
+            delete nameInput.dataset.personName; delete nameInput.dataset.personDisplay; delete nameInput.dataset.directoryChoice;
+        }
+        if (status) status.textContent = '';
+        const query = nameInput.value.trim(), key = getContractLookupKey();
+        list.innerHTML = ''; candidates = []; closeSuggestions();
+        if (!query) return;
+        const result = searchEmbeddedPersonnel(query);
+        candidates = result.data;
+        candidates.forEach(person => {
+            const option = document.createElement('button'); option.type = 'button';
+            option.className = 'personnel-option'; option.setAttribute('role', 'option');
+            option.textContent = personnelDisplay([person]);
+            option.addEventListener('mousedown', event => event.preventDefault());
+            option.addEventListener('click', () => choose(person)); list.appendChild(option);
+        });
+        list.hidden = candidates.length === 0; nameInput.setAttribute('aria-expanded', candidates.length ? 'true' : 'false');
+        if (status) status.textContent = candidates.length ? (result.hasMore ? 'กรุณาพิมพ์เพิ่มเพื่อจำกัดรายชื่อ แล้วเลือกชื่อที่ต้องการ' : 'เลือกชื่อและตำแหน่งจากรายการ') : 'ไม่พบชื่อที่ขึ้นต้นตรงกัน';
+    });
+    nameInput.addEventListener('change', () => {
+        if (nameInput.dataset?.directoryChoice === nameInput.value) return;
+        lookupPersonnel(nameInput, positionInput, status);
+    });
+    positionInput.addEventListener('input', () => {
+        personnelRequests.set(nameInput, (personnelRequests.get(nameInput) || 0) + 1);
+        if (status) status.textContent = '';
+    });
+}
+document.addEventListener('DOMContentLoaded', () => {
+    ['committeeChair', 'chiefSupervisor'].forEach(id => bindPersonnelLookup(
+        document.getElementById(id), document.getElementById(id + 'Position'), document.getElementById(id + 'Status')));
+    const trigger = document.getElementById('supervisorPopupTrigger');
+    const modal = document.getElementById('supervisorsModal');
+    const list = document.getElementById('supervisorsInputsList');
+    const namesInput = document.getElementById('supervisorsData');
+    const peopleInput = document.getElementById('supervisorsPeople');
+    const confirm = document.getElementById('btnConfirmSupervisors');
+    if (!trigger || !modal || !list || !namesInput || !peopleInput || !confirm) return;
+    const rows = [];
+    function addRow(person = {}) {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;flex-direction:column;gap:6px;padding:8px 0;';
+        const name = document.createElement('input');
+        name.type = 'text'; name.placeholder = 'ชื่อ-นามสกุล'; name.value = person.name || '';
+        const position = document.createElement('input');
+        position.type = 'hidden'; position.value = person.position || '';
+        renderPersonnelInput(name, person.name || '', position.value);
+        const status = document.createElement('small'); status.setAttribute('aria-live', 'polite');
+        if (person.name && !person.position) status.textContent = 'ยังไม่มีตำแหน่ง กรุณาตรวจชื่อกับฐานบุคลากร';
+        row.appendChild(name); row.appendChild(position); row.appendChild(status); list.appendChild(row);
+        bindPersonnelLookup(name, position, status);
+        rows.push({name, position});
+    }
+    trigger.addEventListener('click', () => {
+        rows.length = 0; list.innerHTML = '';
+        const people = normalizePersonnel(peopleInput.value, namesInput.value);
+        for (let i = 0; i < Math.max(8, people.length); i++) addRow(people[i]);
+        const add = document.createElement('button'); add.type = 'button'; add.textContent = '+ เพิ่มผู้ควบคุมงาน';
+        add.className = 'primary-btn'; add.style.marginTop = '12px';
+        add.addEventListener('click', () => { addRow(); list.appendChild(add); }); list.appendChild(add);
+        modal.classList.add('active'); trigger.blur();
+    });
+    document.getElementById('closeSupervisorsModal')?.addEventListener('click', () => modal.classList.remove('active'));
+    // Keep unfinished names open on backdrop clicks and Escape.
+    modal.addEventListener('keydown', event => {
+        if (event.key === 'Escape') event.stopPropagation();
+    });
+    confirm.addEventListener('click', () => {
+        const people = rows.map(row => ({name: getPersonnelName(row.name), position: row.position.value.trim()})).filter(person => person.name);
+        const names = people.map(person => person.name);
+        namesInput.value = JSON.stringify(names); peopleInput.value = JSON.stringify(people);
+        trigger.value = personnelDisplay(people);
+        try {
+            localStorage.setItem('form_global_cache_supervisor_subject', getContractLookupKey());
+            localStorage.setItem('form_global_cache_supervisorsData', JSON.stringify(names));
+            localStorage.setItem('form_global_cache_supervisorsPeople', JSON.stringify(people));
+        } catch (error) {}
+        modal.classList.remove('active');
+    });
+});
+
+// ตัวเลือกปีงบประมาณ: ใช้ ID และคลาสแสดงผลเดียวกับ HTML/CSS
+function generateYearOptions() {
+    const container = document.getElementById('yearListContainer');
+    const input = document.getElementById('fiscalYear');
+    if (!container || !input) return;
+    container.innerHTML = '';
+    container.className = 'category-list';
+    container.setAttribute('role', 'list');
+
+    for (let year = 2568; year <= 2580; year++) {
+        const btn = document.createElement('li');
+        btn.tabIndex = 0;
+        btn.className = String(year) === input.value ? 'selected' : '';
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('aria-pressed', String(String(year) === input.value));
+        btn.onkeydown = function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                btn.click();
+            }
+        };
+        btn.textContent = year;
+        btn.onclick = function() {
+            input.value = String(year);
+            // ปิดหน้าต่างได้แม้เบราว์เซอร์ไม่อนุญาตให้บันทึกแคช
+            try {
+                localStorage.setItem('form_global_cache_fiscalYear', String(year));
+            } catch (error) {
+                console.warn('ไม่สามารถบันทึกปีงบประมาณในแคชได้', error);
+            }
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            closeYearModal();
+        };
+        container.appendChild(btn);
+    }
+}
+
+function openYearModal() {
+    const modal = document.getElementById('yearModal');
+    if (!modal) return;
+    generateYearOptions();
+    modal.style.removeProperty('display');
+    modal.classList.add('active');
+}
+
+function closeYearModal() {
+    const modal = document.getElementById('yearModal');
+    if (modal) modal.classList.remove('active');
+}
+
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('yearModal')) closeYearModal();
+});
+
+window.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') closeYearModal();
+});
+
+// Reuse jobDetail (AN) for the incomplete-work reason; no extra data column.
+function syncIncompleteJobDetail() {
+    const status = document.getElementById('jobStatusInput');
+    const detail = document.getElementById('jobDetailInput');
+    if (!status || !detail) return false;
+    const incomplete = status.value === 'ไม่แล้วเสร็จ';
+    const label = detail.previousElementSibling;
+    if (label) label.textContent = incomplete ? 'เหตุผลที่งานไม่แล้วเสร็จ' : 'รายละเอียดหากมีการซ่อมแซม/ส่งพัสดุ';
+    if (incomplete) {
+        if (detail.value === '-') detail.value = '';
+        detail.readOnly = false;
+        detail.classList.remove('popup-input');
+        detail.placeholder = 'กรุณาระบุเหตุผลที่งานไม่แล้วเสร็จ';
+    } else if (detail.placeholder === 'กรุณาระบุเหตุผลที่งานไม่แล้วเสร็จ') {
+        detail.placeholder = 'คลิกเพื่อเลือก หรือระบุรายละเอียด';
+    }
+    return incomplete;
+}
+document.addEventListener('DOMContentLoaded', syncIncompleteJobDetail);
+
+// A soft completion border indicates a value, not validation or successful saving.
+function updateFilledFieldBorders(root = document) {
+    root.querySelectorAll('input, select, textarea').forEach(field => {
+        const type = String(field.type || '').toLowerCase();
+        const excluded = ['hidden', 'button', 'submit', 'reset', 'image', 'range', 'color'].includes(type);
+        let filled = false;
+        if (!excluded) {
+            if (type === 'checkbox' || type === 'radio') filled = field.checked;
+            else if (type === 'file') filled = !!(field.files && field.files.length);
+            else if (field.multiple && field.options) filled = Array.from(field.options).some(option => option.selected && String(option.value).trim());
+            else filled = String(field.value == null ? '' : field.value).trim() !== '';
+        }
+        field.classList.toggle('field-has-value', !!filled);
+    });
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const refresh = () => updateFilledFieldBorders();
+    refresh();
+    document.addEventListener('input', refresh);
+    document.addEventListener('change', refresh);
+    document.addEventListener('reset', () => setTimeout(refresh, 0));
+    document.addEventListener('visibilitychange', refresh);
+    // Existing autofill/popup/cache code writes .value directly without events.
+    // Reading periodically also covers dynamic supervisor rows without changing setters.
+    setInterval(() => { if (!document.hidden) refresh(); }, 300);
+});
+
