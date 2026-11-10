@@ -1083,6 +1083,9 @@ async function submitForm() {
     if (document.getElementById('submissionLetterNo')) {
         data['submissionLetterNo'] = document.getElementById('submissionLetterNo').value;
     }
+    if (document.getElementById('submissionLetterDate')) {
+        data.submissionLetterDate = document.getElementById('submissionLetterDate').getAttribute('data-date') || document.getElementById('submissionLetterDate').value;
+    }
     if (document.getElementById('submissionDate')) {
         data['submissionDate'] = document.getElementById('submissionDate').getAttribute('data-date') || document.getElementById('submissionDate').value;
     }
@@ -1458,7 +1461,7 @@ document.getElementById('contractVisits').addEventListener('input', () => {
     }
 
     // ผูก Event ให้ช่องวันที่ทั้ง 4 ช่อง
-    const dateInputIds = ['contractSigningDate', 'submissionDate', 'contractStart', 'contractEnd', 'workStart', 'workEnd'];
+    const dateInputIds = ['contractSigningDate', 'submissionLetterDate', 'submissionDate', 'contractStart', 'contractEnd', 'workStart', 'workEnd'];
     dateInputIds.forEach(id => {
         const input = document.getElementById(id);
         if (input) {

@@ -811,7 +811,7 @@ textarea[readonly] {
 input.field-has-value:not([type="checkbox"]):not([type="radio"]),
 select.field-has-value,
 textarea.field-has-value {
-    border-color: #3bd335 !important;
+    border-color: #a8cdb4 !important;
 }
 input.field-has-value[type="checkbox"],
 input.field-has-value[type="radio"] {
